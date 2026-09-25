@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>لایتنر آلمانی</title>
+
+<meta name="description" content="لایتنر پنج‌باکسی برای یادگیری لغات آلمانی به فارسی">
+<meta name="theme-color" content="#0b0f1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="لایتنر آلمانی">
+<meta name="application-name" content="لایتنر آلمانی">
+<meta name="msapplication-TileColor" content="#6366f1">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23g)'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3E%F0%9F%93%A6%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23g)'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3E%F0%9F%93%A6%3C/text%3E%3C/svg%3E">
+
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --surface: #151b2b;
+    --surface-2: #1e2638;
+    --surface-3: #2a3348;
+    --border: rgba(255, 255, 255, 0.06);
+    --border-strong: rgba(255, 255, 255, 0.12);
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --accent: #6366f1;
+    --accent-glow: rgba(99, 102, 241, 0.4);
+    --success: #10b981;
+    --success-glow: rgba(16, 185, 129, 0.3);
+    --danger: #f43f5e;
+    --danger-glow: rgba(244, 63, 94, 0.3);
+    --warning: #f59e0b;
+    --warning-glow: rgba(245, 158, 11, 0.3);
+    --radius: 18px;
+    --radius-sm: 12px;
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  [data-theme="light"] {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --surface-2: #f1f5f9;
+    --surface-3: #e2e8f0;
+    --border: rgba(15, 23, 42, 0.06);
+    --border-strong: rgba(15, 23, 42, 0.12);
+    --text: #0f172a;
+    --text-muted: #475569;
+    --text-dim: #94a3b8;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Vazirmatn', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+    transition: background var(--transition), color var(--transition);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(60px);
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -30%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--success-glow), transparent 70%);
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(80px);
+  }
+
+  .app {
+    width: 100%;
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 20px;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+  }
+
+  .logo { display: flex; align-items: center; gap: 12px; }
+
+  .logo-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    box-shadow: 0 8px 24px var(--accent-glow);
+  }
+
+  .logo-text h1 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+
+  .logo-text .sub {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 1px;
+    font-weight: 500;
+  }
+
+  .header-actions { display: flex; gap: 8px; }
+
+  .icon-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+    position: relative;
+  }
+
+  .icon-btn:hover {
+    background: var(--surface-2);
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  #btnInstall {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    width: auto;
+    padding: 0 14px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    gap: 6px;
+    box-shadow: 0 6px 20px var(--success-glow);
+  }
+
+  #btnInstall:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px var(--success-glow);
+  }
+
+  #btnInstall.hidden { display: none; }
+
+  .boxes-bar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+
+  .box-chip {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition);
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .box-chip:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  .box-chip.active {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, var(--surface), rgba(99, 102, 241, 0.08));
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .box-chip .chip-label {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .box-chip .chip-count {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -0.5px;
+  }
+
+  .box-chip.active .chip-count { color: #818cf8; }
+
+  .card-area {
+    perspective: 1600px;
+    min-height: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 8px 0;
+  }
+
+  .card {
+    width: 100%;
+    height: 320px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card.clickable { cursor: pointer; }
+  .card.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 24px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  [data-theme="light"] .card-face {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02) inset;
+  }
+
+  .card-face.back {
+    transform: rotateY(180deg);
+    background: linear-gradient(135deg, var(--surface), rgba(99, 102, 241, 0.12));
+    border-color: var(--accent);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.3),
+      0 0 60px var(--accent-glow);
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+  }
+
+  .card-word {
+    font-size: 3rem;
+    font-weight: 900;
+    direction: ltr;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    word-break: break-word;
+    color: var(--text);
+  }
+
+  .card-article {
+    display: inline-block;
+    padding: 6px 20px;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: lowercase;
+    margin-bottom: 4px;
+  }
+
+  .card-article.der { background: #3b82f6; color: white; }
+  .card-article.die { background: #ec4899; color: white; }
+  .card-article.das { background: #10b981; color: white; }
+
+  .card-meaning {
+    font-size: 1.6rem;
+    color: #c084fc;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .card-meaning.not-found {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .review-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    transition: all 0.3s;
+  }
+
+  .review-actions.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  .action-btn {
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px 10px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all var(--transition);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .action-btn .emoji { font-size: 1.5rem; line-height: 1; }
+  .action-btn .label { font-size: 0.85rem; font-weight: 800; }
+  .action-btn .hint { font-size: 0.65rem; opacity: 0.75; font-weight: 500; }
+
+  .action-btn:not(:disabled):hover {
+    transform: translateY(-3px);
+    filter: brightness(1.1);
+  }
+
+  .action-btn:not(:disabled):active { transform: translateY(-1px); }
+  .action-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .btn-wrong {
+    background: linear-gradient(135deg, #f43f5e, #be123c);
+    box-shadow: 0 8px 24px var(--danger-glow);
+  }
+
+  .btn-hard {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    box-shadow: 0 8px 24px var(--warning-glow);
+  }
+
+  .btn-good {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 8px 24px var(--success-glow);
+  }
+
+  .status-msg {
+    text-align: center;
+    font-size: 0.88rem;
+    min-height: 22px;
+    font-weight: 700;
+    padding: 0 10px;
+    transition: color var(--transition);
+  }
+
+  .add-section {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .add-row { display: flex; gap: 8px; }
+
+  .add-input {
+    flex: 1;
+    background: var(--surface-2);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: all var(--transition);
+    font-family: inherit;
+    direction: ltr;
+    text-align: left;
+  }
+
+  .add-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+    background: var(--surface);
+  }
+
+  .add-input::placeholder {
+    color: var(--text-dim);
+    direction: rtl;
+    text-align: right;
+  }
+
+  .add-btn {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px 24px;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-family: inherit;
+    box-shadow: 0 8px 24px var(--accent-glow);
+    white-space: nowrap;
+  }
+
+  .add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px var(--accent-glow);
+  }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+  }
+
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--surface);
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 24px;
+    max-width: 520px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    transform: scale(0.92);
+    transition: transform var(--transition);
+  }
+
+  .modal-overlay.show .modal { transform: scale(1); }
+
+  .modal h3 {
+    margin-bottom: 18px;
+    color: #818cf8;
+    font-size: 1.1rem;
+    font-weight: 800;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 22px;
+  }
+
+  .btn {
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 11px 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-family: inherit;
+  }
+
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: #4f46e5; transform: translateY(-2px); }
+
+  .btn-ghost {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--border-strong); }
+
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { background: #059669; transform: translateY(-2px); }
+
+  .manage-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .box-selector {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+
+  .box-sel-btn {
+    background: var(--surface-2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 4px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.75rem;
+    transition: all var(--transition);
+    text-align: center;
+  }
+
+  .box-sel-btn:hover {
+    border-color: var(--border-strong);
+    color: var(--text);
+  }
+
+  .box-sel-btn.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .box-sel-btn .cnt {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 900;
+    margin-top: 2px;
+  }
+
+  .word-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 320px;
+    overflow-y: auto;
+    padding-left: 4px;
+  }
+
+  .word-item {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all var(--transition);
+  }
+
+  .word-item:hover {
+    border-color: var(--border-strong);
+  }
+
+  .word-item .w-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .word-item .w-german {
+    font-size: 0.9rem;
+    font-weight: 800;
+    direction: ltr;
+    text-align: left;
+    color: var(--text);
+    word-break: break-word;
+  }
+
+  .word-item .w-persian {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+    word-break: break-word;
+  }
+
+  .word-item .w-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .word-item .w-actions button {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+    color: white;
+  }
+
+  .w-edit { background: var(--accent); }
+  .w-edit:hover { background: #4f46e5; }
+  .w-del { background: var(--danger); }
+  .w-del:hover { background: #be123c; }
+
+  .empty-list {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    padding: 30px 10px;
+  }
+
+  .edit-word-display {
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    font-weight: 800;
+    direction: ltr;
+    text-align: center;
+    color: var(--text);
+    margin-bottom: 14px;
+    word-break: break-word;
+  }
+
+  .edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .edit-field label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .edit-field input {
+    background: var(--surface-2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    font-family: inherit;
+    transition: all var(--transition);
+  }
+
+  .edit-field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .backup-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .backup-section .info {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .backup-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .backup-btns button {
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .import-area {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .import-area.show { display: flex; }
+
+  .file-picker {
+    background: var(--surface-2);
+    border: 2px dashed var(--border-strong);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .file-picker:hover {
+    border-color: var(--accent);
+    background: var(--surface-3);
+  }
+
+  .file-picker.has-file {
+    border-color: var(--success);
+    border-style: solid;
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  .file-picker .file-icon {
+    font-size: 2rem;
+    opacity: 0.7;
+  }
+
+  .file-picker .file-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .file-picker .file-hint {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+
+  .file-picker .file-name {
+    font-size: 0.8rem;
+    color: var(--success);
+    font-weight: 700;
+    word-break: break-all;
+    direction: ltr;
+  }
+
+  .import-info {
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .import-info strong {
+    color: var(--success);
+    font-weight: 800;
+  }
+
+  .install-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: var(--surface);
+    border: 1.5px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 14px 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: calc(100% - 32px);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    direction: rtl;
+  }
+
+  .install-toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .install-toast .toast-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .install-toast .toast-close {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 4px;
+    line-height: 1;
+  }
+
+  .install-toast .toast-action {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 14px; padding-top: max(14px, env(safe-area-inset-top)); padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+    .app { gap: 14px; }
+    .logo-mark { width: 40px; height: 40px; font-size: 1.15rem; }
+    .logo-text h1 { font-size: 1rem; }
+    .icon-btn { width: 38px; height: 38px; font-size: 0.95rem; }
+    #btnInstall { padding: 0 10px; font-size: 0.72rem; height: 38px; }
+    .boxes-bar { gap: 5px; }
+    .box-chip { padding: 9px 3px; }
+    .box-chip .chip-label { font-size: 0.6rem; }
+    .box-chip .chip-count { font-size: 1.1rem; }
+    .card-area { min-height: 280px; }
+    .card { height: 280px; }
+    .card-face { padding: 24px 18px; }
+    .card-word { font-size: 2.2rem; }
+    .card-meaning { font-size: 1.25rem; }
+    .card-article { font-size: 0.9rem; padding: 5px 16px; }
+    .action-btn { padding: 12px 6px; }
+    .action-btn .emoji { font-size: 1.3rem; }
+    .action-btn .label { font-size: 0.75rem; }
+    .action-btn .hint { display: none; }
+    .add-btn { padding: 12px 18px; font-size: 0.9rem; }
+    .add-input { padding: 12px 14px; font-size: 0.95rem; }
+  }
+
+  @media (min-width: 900px) {
+    .app { max-width: 780px; gap: 22px; }
+    .card { height: 360px; }
+    .card-area { min-height: 360px; }
+    .card-word { font-size: 3.5rem; }
+    .card-meaning { font-size: 1.8rem; }
+    .box-chip { padding: 14px 8px; }
+    .box-chip .chip-count { font-size: 1.5rem; }
+    .action-btn { padding: 18px 12px; }
+    .action-btn .emoji { font-size: 1.7rem; }
+    .action-btn .label { font-size: 0.95rem; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="logo">
+      <div class="logo-mark">📦</div>
+      <div class="logo-text">
+        <h1>لایتنر آلمانی</h1>
+        <div class="sub">پنج باکس · مرور فاصله‌دار</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn hidden" id="btnInstall" title="نصب برنامه">📲 <span>نصب</span></button>
+      <button class="icon-btn" id="btnTheme" title="تغییر تم">🌙</button>
+      <button class="icon-btn" id="btnSettings" title="تنظیمات">⚙️</button>
+    </div>
+  </header>
+
+  <div class="boxes-bar" id="boxesBar"></div>
+
+  <div class="card-area">
+    <div class="card" id="card">
+      <div class="card-face front">
+        <div class="card-content" id="frontContent">
+          <div class="card-word" id="frontWord"></div>
+        </div>
+      </div>
+
+      <div class="card-face back">
+        <div class="card-content" id="backContent">
+          <div class="card-article" id="backArticle"></div>
+          <div class="card-word" id="backWord"></div>
+          <div class="card-meaning" id="backMeaning"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-actions" id="reviewActions">
+    <button class="action-btn btn-wrong" id="btnWrong" disabled>
+      <span class="emoji">❌</span>
+      <span class="label">بلد نبودم</span>
+      <span class="hint">برگشت به باکس ۱</span>
+    </button>
+    <button class="action-btn btn-hard" id="btnHard" disabled>
+      <span class="emoji">🤔</span>
+      <span class="label">سخت بود</span>
+      <span class="hint">انتهای صف</span>
+    </button>
+    <button class="action-btn btn-good" id="btnGood" disabled>
+      <span class="emoji">✅</span>
+      <span class="label">بلد بودم</span>
+      <span class="hint">یک باکس جلو</span>
+    </button>
+  </div>
+
+  <div class="status-msg" id="statusMsg"></div>
+
+  <div class="add-section">
+    <div class="add-row">
+      <input type="text" class="add-input" id="inputGerman" placeholder="مثلاً: das Haus" autocomplete="off" spellcheck="false">
+      <button class="add-btn" id="btnAdd">افزودن</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="install-toast" id="installToast">
+  <span class="toast-text" id="toastText">این برنامه را نصب کنید</span>
+  <button class="toast-action" id="toastAction">نصب</button>
+  <button class="toast-close" id="toastClose">✕</button>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <h3>⚙️ تنظیمات</h3>
+
+    <div class="manage-section">
+      <div style="font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:4px;">مدیریت کلمات</div>
+      <div class="box-selector" id="boxSelector"></div>
+      <div class="word-list" id="wordList"></div>
+    </div>
+
+    <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);" class="backup-section">
+      <div style="font-size:0.85rem;font-weight:700;color:var(--text);">پشتیبان‌گیری</div>
+      <div class="info">لغات خود را در یک فایل JSON ذخیره کنید یا از فایل پشتیبان بازیابی کنید.</div>
+      <div class="backup-btns">
+        <button class="btn btn-success" id="btnExport">📤 اکسپورت</button>
+        <button class="btn btn-primary" id="btnImportToggle">📥 اینپورت</button>
+      </div>
+      <div class="import-area" id="importArea">
+        <label class="file-picker" id="filePicker" for="fileInput">
+          <div class="file-icon">📁</div>
+          <div class="file-label">انتخاب فایل پشتیبان</div>
+          <div class="file-hint">فایل JSON را انتخاب کنید</div>
+          <div class="file-name" id="fileName" style="display:none;"></div>
+        </label>
+        <input type="file" id="fileInput" accept=".json,application/json" style="display:none;">
+        <div class="import-info" id="importInfo" style="display:none;"></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary" id="btnImportDo" style="flex:1;" disabled>بازیابی</button>
+          <button class="btn btn-ghost" id="btnImportCancel" style="flex:1;">لغو</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="btnCloseSettings">بستن</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Word Modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h3>✏️ ویرایش ترجمه</h3>
+    <div class="edit-word-display" id="editWordDisplay"></div>
+    <div class="edit-field">
+      <label>آرتیکل (اختیاری)</label>
+      <input type="text" id="editArticle" placeholder="der / die / das" style="direction:ltr;text-align:left;">
+    </div>
+    <div class="edit-field">
+      <label>ترجمه فارسی</label>
+      <input type="text" id="editPersian" placeholder="معنی فارسی...">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="btnCancelEdit">لغو</button>
+      <button class="btn btn-primary" id="btnSaveEdit">ذخیره</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   PWA Setup
+   ============================================================ */
+const manifestData = {
+  name: "لایتنر آلمانی", short_name: "لایتنر",
+  description: "لایتنر پنج‌باکسی برای یادگیری لغات آلمانی به فارسی",
+  start_url: ".", scope: ".", display: "standalone", orientation: "portrait",
+  background_color: "#0b0f1a", theme_color: "#0b0f1a", lang: "fa", dir: "rtl",
+  icons: [{
+    src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23g)'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3E%F0%9F%93%A6%3C/text%3E%3C/svg%3E",
+    sizes: "512x512", type: "image/svg+xml", purpose: "any maskable"
+  }]
+};
+const manifestURL = URL.createObjectURL(new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' }));
+const ml = document.createElement('link'); ml.rel = 'manifest'; ml.href = manifestURL; document.head.appendChild(ml);
+
+const swCode = `
+const CACHE_NAME = 'leitner-de-v3';
+self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./']).catch(()=>{}))); });
+self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
+self.addEventListener('fetch', (e) => {
+  if (e.request.method !== 'GET') return;
+  const url = new URL(e.request.url);
+  if (url.hostname.includes('mymemory')) return;
+  e.respondWith(caches.match(e.request).then(cached => {
+    const fetchP = fetch(e.request).then(res => {
+      if (res && res.status === 200 && res.type === 'basic') {
+        const clone = res.clone();
+        caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+      }
+      return res;
+    }).catch(() => cached);
+    return cached || fetchP;
+  }));
+});
+`;
+if ('serviceWorker' in navigator) {
+  try {
+    const swURL = URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }));
+    window.addEventListener('load', () => navigator.serviceWorker.register(swURL, { scope: './' }).catch(() => {}));
+  } catch (e) {}
+}
+
+let deferredPrompt = null;
+const installBtn = document.getElementById('btnInstall');
+const installToast = document.getElementById('installToast');
+const toastText = document.getElementById('toastText');
+const toastAction = document.getElementById('toastAction');
+const toastClose = document.getElementById('toastClose');
+
+const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBtn) installBtn.classList.remove('hidden');
+  showInstallToast('برنامه را نصب کنید و آفلاین استفاده کنید', 'نصب');
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  if (installBtn) installBtn.classList.add('hidden');
+  hideInstallToast();
+  showToastMessage('برنامه با موفقیت نصب شد');
+});
+
+if (installBtn) installBtn.addEventListener('click', triggerInstall);
+if (toastAction) toastAction.addEventListener('click', triggerInstall);
+if (toastClose) toastClose.addEventListener('click', () => {
+  hideInstallToast();
+  localStorage.setItem('install_dismissed', Date.now().toString());
+});
+
+async function triggerInstall() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    if (installBtn) installBtn.classList.add('hidden');
+    hideInstallToast();
+  } else if (isIOS()) {
+    showToastMessage('در Safari روی Share بزنید و Add to Home Screen را انتخاب کنید', 6000);
+  } else {
+    showToastMessage('از منوی مرورگر Install app را انتخاب کنید', 6000);
+  }
+}
+
+function showInstallToast(text, actionLabel) {
+  const d = localStorage.getItem('install_dismissed');
+  if (d) { const days = (Date.now() - parseInt(d)) / 86400000; if (days < 7) return; }
+  if (isStandalone()) return;
+  toastText.textContent = text;
+  toastAction.textContent = actionLabel || 'نصب';
+  installToast.classList.add('show');
+  setTimeout(() => hideInstallToast(), 15000);
+}
+function hideInstallToast() { installToast.classList.remove('show'); }
+
+function showToastMessage(msg, duration = 3000) {
+  const existing = document.getElementById('generic-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'generic-toast';
+  toast.style.cssText = `
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(120%);
+    background: var(--surface); border: 1.5px solid var(--accent); border-radius: 12px;
+    padding: 14px 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); z-index: 2000;
+    max-width: calc(100% - 32px); font-size: 0.85rem; font-weight: 600; color: var(--text);
+    text-align: center; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); direction: rtl;
+  `;
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.style.transform = 'translateX(-50%) translateY(0)');
+  setTimeout(() => {
+    toast.style.transform = 'translateX(-50%) translateY(120%)';
+    setTimeout(() => toast.remove(), 400);
+  }, duration);
+}
+
+if (isIOS() && !isStandalone()) setTimeout(() => showInstallToast('برای نصب: Share → Add to Home Screen', 'راهنما'), 3000);
+setTimeout(() => { if (!deferredPrompt && !isStandalone() && !isIOS()) showInstallToast('این برنامه را نصب کنید', 'راهنما'); }, 5000);
+
+/* ============================================================
+   لایتنر آلمانی
+   ============================================================ */
+
+const STORAGE = {
+  cards: 'leitner_de_v11',
+  settings: 'leitner_de_settings_v11',
+  stats: 'leitner_de_stats_v11',
+  cache: 'leitner_de_cache_v11'
+};
+
+const DEFAULT_SETTINGS = {
+  intervals: { 1: 1, 2: 2, 3: 4, 4: 7, 5: 14 },
+  theme: 'dark'
+};
+
+let cards = [];
+let settings = { ...DEFAULT_SETTINGS, intervals: { ...DEFAULT_SETTINGS.intervals } };
+let stats = { reviews: {}, totalReviews: 0, totalCorrect: 0, totalWrong: 0, streak: 0, lastReview: null };
+let cache = {};
+
+let activeBox = 1;
+let currentCardId = null;
+let isFlipped = false;
+let sessionQueue = [];
+let sessionPosition = 0;
+
+let settingsSelectedBox = 1;
+let editingCardId = null;
+let pendingImportData = null;
+
+/* قفل تعویض کارت */
+let isTransitioning = false;
+
+const $ = (id) => document.getElementById(id);
+
+const today = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+};
+const addDays = (dateStr, days) => {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + days);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+};
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+
+const extractArticle = (german) => {
+  const trimmed = String(german || '').trim();
+  const m = trimmed.match(/^(der|die|das)\s+(.+)$/i);
+  if (m) return { article: m[1].toLowerCase(), word: m[2].trim() };
+  return { article: '', word: trimmed };
+};
+
+const shuffle = (arr) => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+const save = () => {
+  try {
+    localStorage.setItem(STORAGE.cards, JSON.stringify(cards));
+    localStorage.setItem(STORAGE.settings, JSON.stringify(settings));
+    localStorage.setItem(STORAGE.stats, JSON.stringify(stats));
+    localStorage.setItem(STORAGE.cache, JSON.stringify(cache));
+  } catch (e) { console.warn('Save error:', e); }
+};
+
+const load = () => {
+  try {
+    const c = localStorage.getItem(STORAGE.cards);
+    if (c) cards = JSON.parse(c);
+    const s = localStorage.getItem(STORAGE.settings);
+    if (s) {
+      const p = JSON.parse(s);
+      settings = { ...DEFAULT_SETTINGS, ...p, intervals: { ...DEFAULT_SETTINGS.intervals, ...(p.intervals || {}) } };
+    }
+    const st = localStorage.getItem(STORAGE.stats);
+    if (st) stats = { ...stats, ...JSON.parse(st) };
+    const ca = localStorage.getItem(STORAGE.cache);
+    if (ca) cache = JSON.parse(ca);
+  } catch (e) { console.warn('Load error:', e); }
+
+  cards.forEach(c => {
+    if (c.box === undefined) c.box = 1;
+    if (!c.nextReview) c.nextReview = today();
+    if (!c.createdAt) c.createdAt = today();
+    if (!c.history) c.history = [];
+  });
+};
+
+const fetchTranslation = async (word) => {
+  const key = word.toLowerCase();
+  if (cache[key]) return cache[key];
+
+  try {
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=de|fa`;
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 8000);
+    const res = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(t);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (data?.responseData?.translatedText) {
+      let text = data.responseData.translatedText.trim().replace(/^["']|["']$/g, '');
+      if (text.toLowerCase() === word.toLowerCase()) return null;
+      cache[key] = text;
+      save();
+      return text;
+    }
+    return null;
+  } catch (e) {
+    console.warn('Translation error:', e);
+    return null;
+  }
+};
+
+const recordReview = (isCorrect, isHard) => {
+  const d = today();
+  if (!stats.reviews[d]) stats.reviews[d] = { correct: 0, wrong: 0, hard: 0 };
+  if (isHard) stats.reviews[d].hard++;
+  else if (isCorrect) { stats.reviews[d].correct++; stats.totalCorrect++; }
+  else { stats.reviews[d].wrong++; stats.totalWrong++; }
+  stats.totalReviews++;
+  if (stats.lastReview !== d) {
+    stats.streak = (stats.lastReview === addDays(d, -1)) ? stats.streak + 1 : 1;
+    stats.lastReview = d;
+  }
+  save();
+};
+
+const getCardsInBox = (box) => cards.filter(c => c.box === box);
+const getBoxCount = (box) => cards.filter(c => c.box === box).length;
+
+const renderBoxes = () => {
+  const bar = $('boxesBar');
+  bar.innerHTML = '';
+  for (let b = 1; b <= 5; b++) {
+    const total = getBoxCount(b);
+    const chip = document.createElement('div');
+    chip.className = 'box-chip' + (activeBox === b ? ' active' : '');
+    chip.innerHTML = `
+      <div class="chip-label">باکس ${b}</div>
+      <div class="chip-count">${total}</div>
+    `;
+    chip.onclick = () => switchBox(b);
+    bar.appendChild(chip);
+  }
+};
+
+const buildSessionQueue = () => {
+  const boxCards = getCardsInBox(activeBox);
+  sessionQueue = shuffle(boxCards.map(c => c.id));
+  sessionPosition = 0;
+};
+
+const switchBox = (box) => {
+  activeBox = box;
+  currentCardId = null;
+  isFlipped = false;
+  buildSessionQueue();
+  renderBoxes();
+  showNextCard(0);
+};
+
+const updateButtons = () => {
+  const has = currentCardId !== null;
+  $('btnWrong').disabled = !has || !isFlipped;
+  $('btnHard').disabled = !has || !isFlipped;
+  $('btnGood').disabled = !has || !isFlipped;
+};
+
+const clearCardContent = () => {
+  $('frontWord').textContent = '';
+  $('backArticle').textContent = '';
+  $('backArticle').style.display = 'none';
+  $('backArticle').className = 'card-article';
+  $('backWord').textContent = '';
+  $('backMeaning').textContent = '';
+  $('backMeaning').className = 'card-meaning';
+};
+
+const showEmptyCard = () => {
+  clearCardContent();
+  $('card').classList.remove('flipped', 'clickable');
+  $('reviewActions').classList.remove('visible');
+  currentCardId = null;
+  isFlipped = false;
+  updateButtons();
+};
+
+/* رندر همگام کارت — بدون درخواست async */
+const renderCardSync = (card) => {
+  clearCardContent();
+
+  $('frontWord').textContent = card.word || extractArticle(card.german).word || card.german;
+
+  const article = card.article || extractArticle(card.german).article;
+  if (article) {
+    $('backArticle').textContent = article;
+    $('backArticle').className = 'card-article ' + article;
+    $('backArticle').style.display = 'inline-block';
+  }
+
+  $('backWord').textContent = card.word || extractArticle(card.german).word || card.german;
+
+  if (card.persian) {
+    $('backMeaning').textContent = card.persian;
+    $('backMeaning').className = 'card-meaning';
+  } else {
+    $('backMeaning').textContent = 'معنی پیدا نشد';
+    $('backMeaning').className = 'card-meaning not-found';
+  }
+
+  $('card').classList.remove('flipped');
+  $('card').classList.add('clickable');
+  isFlipped = false;
+  $('reviewActions').classList.remove('visible');
+  updateButtons();
+};
+
+/* نمایش کارت بعدی با تأخیر اختیاری */
+const showNextCard = async (delay = 0) => {
+  if (isTransitioning) return;
+  isTransitioning = true;
+
+  try {
+    // ۱. پاک‌سازی فوری کارت قبلی
+    clearCardContent();
+    $('card').classList.remove('flipped', 'clickable');
+    $('reviewActions').classList.remove('visible');
+    currentCardId = null;
+    isFlipped = false;
+    updateButtons();
+
+    // ۲. تأخیر قبل از نمایش کارت بعدی
+    if (delay > 0) {
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+
+    // ۳. اگر صف خالی است، خارج شو
+    if (sessionQueue.length === 0) {
+      isTransitioning = false;
+      return;
+    }
+    if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
+
+    // ۴. اولین کارت معتبر را پیدا کن
+    let attempts = 0;
+    while (attempts < sessionQueue.length) {
+      const id = sessionQueue[sessionPosition];
+      const card = cards.find(c => c.id === id);
+
+      if (card && card.box === activeBox) {
+        // اگر معنی ندارد، قبل از نمایش از API بگیر
+        if (!card.persian) {
+          const wordToTranslate = card.word || extractArticle(card.german).word || card.german;
+          const tr = await fetchTranslation(wordToTranslate);
+          if (tr) { card.persian = tr; save(); }
+        }
+
+        // رندر کارت با معنی کامل
+        currentCardId = card.id;
+        isFlipped = false;
+        renderCardSync(card);
+        isTransitioning = false;
+        return;
+      }
+
+      sessionQueue.splice(sessionPosition, 1);
+      attempts++;
+    }
+
+    // هیچ کارت معتبری پیدا نشد
+    sessionQueue = [];
+    sessionPosition = 0;
+    showEmptyCard();
+  } finally {
+    isTransitioning = false;
+  }
+};
+
+const flipCard = () => {
+  if (!currentCardId) return;
+  isFlipped = !isFlipped;
+  $('card').classList.toggle('flipped', isFlipped);
+  $('reviewActions').classList.toggle('visible', isFlipped);
+  updateButtons();
+};
+
+/* ==================== پاسخ‌ها با تأخیر نیم‌ثانیه ==================== */
+
+const afterAnswer = () => {
+  // پاک‌سازی فوری و برگرداندن کارت به حالت رو
+  clearCardContent();
+  $('card').classList.remove('flipped', 'clickable');
+  $('reviewActions').classList.remove('visible');
+  currentCardId = null;
+  isFlipped = false;
+  updateButtons();
+  // نمایش کارت بعدی با تأخیر نیم‌ثانیه
+  showNextCard(250);
+};
+
+const markGood = () => {
+  const card = cards.find(c => c.id === currentCardId);
+  if (!card) return;
+
+  const oldBox = card.box;
+  const newBox = Math.min(5, card.box + 1);
+  card.box = newBox;
+  card.nextReview = addDays(today(), settings.intervals[newBox]);
+  card.history.push({ date: today(), result: 'good', from: oldBox, to: newBox });
+  if (card.history.length > 100) card.history = card.history.slice(-100);
+
+  recordReview(true, false);
+  save();
+  showStatus('موفق', 'success');
+  renderBoxes();
+
+  const idx = sessionQueue.indexOf(card.id);
+  if (idx !== -1) sessionQueue.splice(idx, 1);
+  if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
+
+  afterAnswer();
+};
+
+const markWrong = () => {
+  const card = cards.find(c => c.id === currentCardId);
+  if (!card) return;
+
+  const oldBox = card.box;
+  card.box = 1;
+  card.nextReview = addDays(today(), settings.intervals[1]);
+  card.history.push({ date: today(), result: 'wrong', from: oldBox, to: 1 });
+  if (card.history.length > 100) card.history = card.history.slice(-100);
+
+  recordReview(false, false);
+  save();
+  showStatus('موفق', 'success');
+  renderBoxes();
+
+  const idx = sessionQueue.indexOf(card.id);
+  if (idx !== -1) sessionQueue.splice(idx, 1);
+  if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
+
+  afterAnswer();
+};
+
+const markHard = () => {
+  const card = cards.find(c => c.id === currentCardId);
+  if (!card) return;
+
+  recordReview(false, true);
+  save();
+  showStatus('موفق', 'success');
+
+  // انتقال به انتهای صف
+  const idx = sessionQueue.indexOf(card.id);
+  if (idx !== -1) { sessionQueue.splice(idx, 1); sessionQueue.push(card.id); }
+  if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
+
+  afterAnswer();
+};
+
+let statusTimer = null;
+const showStatus = (msg, type = 'success') => {
+  const el = $('statusMsg');
+  el.textContent = msg;
+  const colors = { success: 'var(--success)', danger: 'var(--danger)', warning: 'var(--warning)' };
+  el.style.color = colors[type] || colors.success;
+  if (statusTimer) clearTimeout(statusTimer);
+  statusTimer = setTimeout(() => { el.textContent = ''; }, 2000);
+};
+
+const addCard = async () => {
+  const input = $('inputGerman');
+  const raw = input.value.trim();
+  if (!raw) { showStatus('کلمه را وارد کنید', 'danger'); return; }
+  if (cards.some(c => c.german.toLowerCase() === raw.toLowerCase())) {
+    showStatus('تکراری است', 'danger'); return;
+  }
+  const { article, word } = extractArticle(raw);
+  const card = {
+    id: uid(), german: raw, word: word || raw, article: article,
+    persian: '', box: 1, nextReview: today(), createdAt: today(), history: []
+  };
+  cards.push(card);
+  save();
+  input.value = '';
+  input.focus();
+
+  fetchTranslation(word || raw).then(tr => { if (tr) { card.persian = tr; save(); } });
+
+  showStatus('موفق', 'success');
+  renderBoxes();
+  if (activeBox === 1 && !currentCardId) {
+    buildSessionQueue();
+    showNextCard(0);
+  }
+};
+
+/* ==================== Settings ==================== */
+const openSettings = () => {
+  settingsSelectedBox = 1;
+  renderBoxSelector();
+  renderWordList();
+  $('importArea').classList.remove('show');
+  $('fileInput').value = '';
+  $('fileName').style.display = 'none';
+  $('fileName').textContent = '';
+  $('importInfo').style.display = 'none';
+  $('importInfo').textContent = '';
+  $('filePicker').classList.remove('has-file');
+  $('btnImportDo').disabled = true;
+  pendingImportData = null;
+  $('settingsModal').classList.add('show');
+};
+
+const renderBoxSelector = () => {
+  const sel = $('boxSelector');
+  sel.innerHTML = '';
+  for (let b = 1; b <= 5; b++) {
+    const count = getBoxCount(b);
+    const btn = document.createElement('button');
+    btn.className = 'box-sel-btn' + (settingsSelectedBox === b ? ' active' : '');
+    btn.innerHTML = `باکس ${b}<span class="cnt">${count}</span>`;
+    btn.onclick = () => {
+      settingsSelectedBox = b;
+      renderBoxSelector();
+      renderWordList();
+    };
+    sel.appendChild(btn);
+  }
+};
+
+const renderWordList = () => {
+  const list = $('wordList');
+  const boxCards = getCardsInBox(settingsSelectedBox);
+  if (boxCards.length === 0) {
+    list.innerHTML = '<div class="empty-list">واژه‌ای در این باکس نیست</div>';
+    return;
+  }
+  list.innerHTML = '';
+  boxCards.forEach(card => {
+    const item = document.createElement('div');
+    item.className = 'word-item';
+    item.innerHTML = `
+      <div class="w-info">
+        <div class="w-german">${escapeHtml(card.german)}</div>
+        <div class="w-persian">${escapeHtml(card.persian || '—')}</div>
+      </div>
+      <div class="w-actions">
+        <button class="w-edit" title="ویرایش">✏️</button>
+        <button class="w-del" title="حذف">🗑️</button>
+      </div>
+    `;
+    item.querySelector('.w-edit').onclick = () => openEditModal(card.id);
+    item.querySelector('.w-del').onclick = () => deleteCard(card.id);
+    list.appendChild(item);
+  });
+};
+
+const escapeHtml = (s) => String(s || '')
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+const openEditModal = (cardId) => {
+  const card = cards.find(c => c.id === cardId);
+  if (!card) return;
+  editingCardId = cardId;
+  const article = card.article || extractArticle(card.german).article;
+  $('editWordDisplay').textContent = card.german;
+  $('editArticle').value = article || '';
+  $('editPersian').value = card.persian || '';
+  $('editModal').classList.add('show');
+  setTimeout(() => $('editPersian').focus(), 100);
+};
+
+const saveEdit = () => {
+  const card = cards.find(c => c.id === editingCardId);
+  if (!card) return;
+  const newArticle = $('editArticle').value.trim().toLowerCase();
+  const newPersian = $('editPersian').value.trim();
+
+  if (newArticle && /^(der|die|das)$/.test(newArticle)) {
+    const { word } = extractArticle(card.german);
+    card.article = newArticle;
+    card.german = newArticle + ' ' + word;
+    card.word = word;
+  } else if (!newArticle) {
+    const { word } = extractArticle(card.german);
+    card.article = '';
+    card.german = word;
+    card.word = word;
+  }
+
+  if (newPersian) {
+    card.persian = newPersian;
+    const key = (card.word || card.german).toLowerCase();
+    cache[key] = newPersian;
+  }
+
+  save();
+  showToastMessage('ذخیره شد');
+  $('editModal').classList.remove('show');
+  renderWordList();
+
+  if (currentCardId === card.id) renderCardSync(card);
+};
+
+const deleteCard = (cardId) => {
+  if (!confirm('این واژه حذف شود؟')) return;
+  cards = cards.filter(c => c.id !== cardId);
+  const idx = sessionQueue.indexOf(cardId);
+  if (idx !== -1) sessionQueue.splice(idx, 1);
+  save();
+  renderWordList();
+  renderBoxSelector();
+  renderBoxes();
+  if (currentCardId === cardId) {
+    currentCardId = null;
+    isFlipped = false;
+    showNextCard(0);
+  }
+  showToastMessage('حذف شد');
+};
+
+/* ==================== Export ==================== */
+const exportCards = () => {
+  const data = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    cards: cards.map(c => ({
+      german: c.german,
+      word: c.word,
+      article: c.article,
+      persian: c.persian,
+      box: c.box,
+      nextReview: c.nextReview,
+      createdAt: c.createdAt
+    }))
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `leitner-backup-${today()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToastMessage('فایل پشتیبان دانلود شد');
+};
+
+/* ==================== Import ==================== */
+const handleFileSelect = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    try {
+      const data = JSON.parse(event.target.result);
+      if (!data.cards || !Array.isArray(data.cards)) {
+        showToastMessage('فایل نامعتبر است', 2500);
+        $('filePicker').classList.remove('has-file');
+        $('fileName').style.display = 'none';
+        $('importInfo').style.display = 'none';
+        $('btnImportDo').disabled = true;
+        pendingImportData = null;
+        return;
+      }
+      pendingImportData = data;
+      $('filePicker').classList.add('has-file');
+      $('fileName').style.display = 'block';
+      $('fileName').textContent = file.name;
+      const validCount = data.cards.filter(c => c.german).length;
+      $('importInfo').style.display = 'block';
+      $('importInfo').innerHTML = `فایل انتخاب شد: <strong>${validCount}</strong> واژه آماده بازیابی.`;
+      $('btnImportDo').disabled = false;
+    } catch (err) {
+      showToastMessage('خطا در خواندن فایل', 2500);
+      $('filePicker').classList.remove('has-file');
+      $('fileName').style.display = 'none';
+      $('importInfo').style.display = 'none';
+      $('btnImportDo').disabled = true;
+      pendingImportData = null;
+    }
+  };
+  reader.readAsText(file);
+};
+
+const doImport = () => {
+  if (!pendingImportData) return;
+  const data = pendingImportData;
+  let added = 0, skipped = 0;
+  data.cards.forEach(c => {
+    if (!c.german) return;
+    if (cards.some(x => x.german.toLowerCase() === c.german.toLowerCase())) {
+      skipped++; return;
+    }
+    const { article, word } = extractArticle(c.german);
+    cards.push({
+      id: uid(),
+      german: c.german,
+      word: c.word || word || c.german,
+      article: c.article || article || '',
+      persian: c.persian || '',
+      box: Math.min(5, Math.max(1, parseInt(c.box) || 1)),
+      nextReview: c.nextReview || today(),
+      createdAt: c.createdAt || today(),
+      history: []
+    });
+    added++;
+  });
+  save();
+  renderBoxes();
+  buildSessionQueue();
+  renderWordList();
+  renderBoxSelector();
+  $('importArea').classList.remove('show');
+  $('fileInput').value = '';
+  $('fileName').style.display = 'none';
+  $('importInfo').style.display = 'none';
+  $('filePicker').classList.remove('has-file');
+  $('btnImportDo').disabled = true;
+  pendingImportData = null;
+  showToastMessage(`${added} واژه اضافه شد${skipped ? ` — ${skipped} تکراری` : ''}`, 3500);
+};
+
+/* ==================== Theme ==================== */
+const applyTheme = () => {
+  document.documentElement.setAttribute('data-theme', settings.theme);
+  $('btnTheme').textContent = settings.theme === 'dark' ? '🌙' : '☀️';
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', settings.theme === 'dark' ? '#0b0f1a' : '#f8fafc');
+};
+
+const toggleTheme = () => {
+  settings.theme = settings.theme === 'dark' ? 'light' : 'dark';
+  applyTheme();
+  save();
+};
+
+/* ==================== Events ==================== */
+const bind = () => {
+  $('card').onclick = (e) => {
+    if (e.target.closest('button')) return;
+    if (!currentCardId) return;
+    flipCard();
+  };
+  $('btnWrong').onclick = markWrong;
+  $('btnHard').onclick = markHard;
+  $('btnGood').onclick = markGood;
+  $('btnAdd').onclick = addCard;
+  $('inputGerman').onkeydown = (e) => { if (e.key === 'Enter') addCard(); };
+  $('btnTheme').onclick = toggleTheme;
+
+  $('btnSettings').onclick = openSettings;
+  $('btnCloseSettings').onclick = () => $('settingsModal').classList.remove('show');
+  $('settingsModal').onclick = (e) => { if (e.target === $('settingsModal')) $('settingsModal').classList.remove('show'); };
+
+  $('btnExport').onclick = exportCards;
+  $('btnImportToggle').onclick = () => $('importArea').classList.toggle('show');
+  $('fileInput').onchange = handleFileSelect;
+  $('btnImportDo').onclick = doImport;
+  $('btnImportCancel').onclick = () => {
+    $('importArea').classList.remove('show');
+    $('fileInput').value = '';
+    $('fileName').style.display = 'none';
+    $('importInfo').style.display = 'none';
+    $('filePicker').classList.remove('has-file');
+    $('btnImportDo').disabled = true;
+    pendingImportData = null;
+  };
+
+  $('btnCancelEdit').onclick = () => $('editModal').classList.remove('show');
+  $('btnSaveEdit').onclick = saveEdit;
+  $('editModal').onclick = (e) => { if (e.target === $('editModal')) $('editModal').classList.remove('show'); };
+  $('editPersian').onkeydown = (e) => { if (e.key === 'Enter') saveEdit(); };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      if (currentCardId) flipCard();
+    } else if (e.key === 'ArrowRight' || e.key === '1') {
+      if (isFlipped) markGood();
+    } else if (e.key === 'ArrowLeft' || e.key === '2') {
+      if (isFlipped) markWrong();
+    } else if (e.key === 'ArrowDown' || e.key === '3') {
+      if (isFlipped) markHard();
+    } else if (e.key === 'Escape') {
+      $('settingsModal').classList.remove('show');
+      $('editModal').classList.remove('show');
+    }
+  });
+
+  window.addEventListener('beforeunload', save);
+  setInterval(save, 20000);
+};
+
+const init = () => {
+  load();
+  applyTheme();
+  bind();
+  renderBoxes();
+  buildSessionQueue();
+  showNextCard(0);
+  if (isStandalone() && installBtn) installBtn.classList.add('hidden');
+};
+
+init();
+</script>
+</body>
+</html>

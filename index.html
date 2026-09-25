@@ -341,7 +341,6 @@
     font-weight: 600;
   }
 
-  /* دکمه تلفظ */
   .speak-btn {
     display: inline-flex;
     align-items: center;
@@ -1035,8 +1034,8 @@
       <div style="font-size:0.85rem;font-weight:700;color:var(--text);">پشتیبان‌گیری</div>
       <div class="info">لغات خود را در یک فایل JSON ذخیره کنید یا از فایل پشتیبان بازیابی کنید.</div>
       <div class="backup-btns">
-        <button class="btn btn-success" id="btnExport">📤 اکسپورت</button>
-        <button class="btn btn-primary" id="btnImportToggle">📥 اینپورت</button>
+        <button class="btn btn-success" id="btnExport">📤 بارگیری</button>
+        <button class="btn btn-primary" id="btnImportToggle">📥 بارگذاری</button>
       </div>
       <div class="import-area" id="importArea">
         <label class="file-picker" id="filePicker" for="fileInput">
@@ -1098,13 +1097,13 @@ const manifestURL = URL.createObjectURL(new Blob([JSON.stringify(manifestData)],
 const ml = document.createElement('link'); ml.rel = 'manifest'; ml.href = manifestURL; document.head.appendChild(ml);
 
 const swCode = `
-const CACHE_NAME = 'leitner-de-v4';
+const CACHE_NAME = 'leitner-de-v6';
 self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./']).catch(()=>{}))); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
-  if (url.hostname.includes('mymemory')) return;
+  if (url.hostname.includes('mymemory') || url.hostname.includes('translate.googleapis')) return;
   e.respondWith(caches.match(e.request).then(cached => {
     const fetchP = fetch(e.request).then(res => {
       if (res && res.status === 200 && res.type === 'basic') {
@@ -1124,6 +1123,221 @@ if ('serviceWorker' in navigator) {
   } catch (e) {}
 }
 
+/* ============================================================
+   ذخیره‌سازی چندلایه — localStorage + IndexedDB + sessionStorage
+   ============================================================ */
+
+/* ---------- IndexedDB wrapper ---------- */
+const IDB_NAME = 'leitner_de_idb';
+const IDB_STORE = 'kv';
+let idbInstance = null;
+
+const openIDB = () => {
+  return new Promise((resolve) => {
+    if (idbInstance) return resolve(idbInstance);
+    try {
+      if (!('indexedDB' in window)) return resolve(null);
+      const req = indexedDB.open(IDB_NAME, 1);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(IDB_STORE)) {
+          db.createObjectStore(IDB_STORE);
+        }
+      };
+      req.onsuccess = (e) => {
+        idbInstance = e.target.result;
+        resolve(idbInstance);
+      };
+      req.onerror = () => resolve(null);
+      req.onblocked = () => resolve(null);
+    } catch (e) {
+      resolve(null);
+    }
+  });
+};
+
+const idbSet = async (key, value) => {
+  const db = await openIDB();
+  if (!db) return false;
+  return new Promise((resolve) => {
+    try {
+      const tx = db.transaction(IDB_STORE, 'readwrite');
+      const store = tx.objectStore(IDB_STORE);
+      store.put(value, key);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => resolve(false);
+      tx.onabort = () => resolve(false);
+    } catch (e) { resolve(false); }
+  });
+};
+
+const idbGet = async (key) => {
+  const db = await openIDB();
+  if (!db) return null;
+  return new Promise((resolve) => {
+    try {
+      const tx = db.transaction(IDB_STORE, 'readonly');
+      const store = tx.objectStore(IDB_STORE);
+      const req = store.get(key);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => resolve(null);
+    } catch (e) { resolve(null); }
+  });
+};
+
+/* ---------- ذخیره چندلایه ---------- */
+const STORAGE = {
+  cards: 'leitner_de_v14',
+  settings: 'leitner_de_settings_v14',
+  stats: 'leitner_de_stats_v14',
+  cache: 'leitner_de_cache_v14'
+};
+
+/* ذخیره‌سازی خودکار چندلایه */
+let saveInProgress = false;
+const save = async () => {
+  if (saveInProgress) return;
+  saveInProgress = true;
+  try {
+    const payload = {
+      cards: JSON.stringify(cards),
+      settings: JSON.stringify(settings),
+      stats: JSON.stringify(stats),
+      cache: JSON.stringify(cache),
+      savedAt: Date.now(),
+      version: 14
+    };
+
+    // لایه ۱: localStorage (سریع و همگام)
+    try {
+      localStorage.setItem(STORAGE.cards, payload.cards);
+      localStorage.setItem(STORAGE.settings, payload.settings);
+      localStorage.setItem(STORAGE.stats, payload.stats);
+      localStorage.setItem(STORAGE.cache, payload.cache);
+      localStorage.setItem(STORAGE.cards + '_ts', payload.savedAt.toString());
+    } catch (e) {
+      console.warn('localStorage save failed:', e);
+    }
+
+    // لایه ۲: sessionStorage (به‌عنوان پشتیبان اضافی)
+    try {
+      sessionStorage.setItem(STORAGE.cards, payload.cards);
+      sessionStorage.setItem(STORAGE.settings, payload.settings);
+      sessionStorage.setItem(STORAGE.stats, payload.stats);
+      sessionStorage.setItem(STORAGE.cache, payload.cache);
+    } catch (e) {}
+
+    // لایه ۳: IndexedDB (پایدارترین)
+    try {
+      await idbSet('all', payload);
+    } catch (e) {}
+  } finally {
+    saveInProgress = false;
+  }
+};
+
+/* ذخیره همگام فوری برای لحظات بحرانی (beforeunload, visibilitychange) */
+const saveSync = () => {
+  try {
+    localStorage.setItem(STORAGE.cards, JSON.stringify(cards));
+    localStorage.setItem(STORAGE.settings, JSON.stringify(settings));
+    localStorage.setItem(STORAGE.stats, JSON.stringify(stats));
+    localStorage.setItem(STORAGE.cache, JSON.stringify(cache));
+    localStorage.setItem(STORAGE.cards + '_ts', Date.now().toString());
+  } catch (e) {}
+  // IndexedDB به‌صورت async
+  idbSet('all', {
+    cards: JSON.stringify(cards),
+    settings: JSON.stringify(settings),
+    stats: JSON.stringify(stats),
+    cache: JSON.stringify(cache),
+    savedAt: Date.now(),
+    version: 14
+  }).catch(() => {});
+};
+
+/* ---------- بازیابی چندلایه ---------- */
+const load = async () => {
+  let loaded = false;
+
+  // تلاش ۱: localStorage
+  try {
+    const c = localStorage.getItem(STORAGE.cards);
+    const s = localStorage.getItem(STORAGE.settings);
+    const st = localStorage.getItem(STORAGE.stats);
+    const ca = localStorage.getItem(STORAGE.cache);
+
+    if (c) {
+      cards = JSON.parse(c);
+      loaded = true;
+    }
+    if (s) {
+      const p = JSON.parse(s);
+      settings = { ...DEFAULT_SETTINGS, ...p, intervals: { ...DEFAULT_SETTINGS.intervals, ...(p.intervals || {}) } };
+    }
+    if (st) stats = { ...stats, ...JSON.parse(st) };
+    if (ca) cache = JSON.parse(ca);
+  } catch (e) {
+    console.warn('localStorage load failed:', e);
+  }
+
+  // تلاش ۲: اگر localStorage خالی بود، از IndexedDB بگیر
+  if (!loaded) {
+    try {
+      const idbData = await idbGet('all');
+      if (idbData && idbData.cards) {
+        cards = JSON.parse(idbData.cards);
+        if (idbData.settings) {
+          const p = JSON.parse(idbData.settings);
+          settings = { ...DEFAULT_SETTINGS, ...p, intervals: { ...DEFAULT_SETTINGS.intervals, ...(p.intervals || {}) } };
+        }
+        if (idbData.stats) stats = { ...stats, ...JSON.parse(idbData.stats) };
+        if (idbData.cache) cache = JSON.parse(idbData.cache);
+        loaded = true;
+        console.log('✅ بازیابی از IndexedDB');
+      }
+    } catch (e) {
+      console.warn('IndexedDB load failed:', e);
+    }
+  }
+
+  // تلاش ۳: sessionStorage
+  if (!loaded) {
+    try {
+      const c = sessionStorage.getItem(STORAGE.cards);
+      if (c) {
+        cards = JSON.parse(c);
+        const s = sessionStorage.getItem(STORAGE.settings);
+        const st = sessionStorage.getItem(STORAGE.stats);
+        const ca = sessionStorage.getItem(STORAGE.cache);
+        if (s) {
+          const p = JSON.parse(s);
+          settings = { ...DEFAULT_SETTINGS, ...p, intervals: { ...DEFAULT_SETTINGS.intervals, ...(p.intervals || {}) } };
+        }
+        if (st) stats = { ...stats, ...JSON.parse(st) };
+        if (ca) cache = JSON.parse(ca);
+        loaded = true;
+        console.log('✅ بازیابی از sessionStorage');
+      }
+    } catch (e) {}
+  }
+
+  if (!Array.isArray(cards)) cards = [];
+
+  cards.forEach(c => {
+    if (c.box === undefined) c.box = 1;
+    if (!c.nextReview) c.nextReview = today();
+    if (!c.createdAt) c.createdAt = today();
+    if (!c.history) c.history = [];
+  });
+
+  // بلافاصله یک بار ذخیره کن تا همه لایه‌ها همگام شوند
+  saveSync();
+};
+
+/* ============================================================
+   PWA Install
+   ============================================================ */
 let deferredPrompt = null;
 const installBtn = document.getElementById('btnInstall');
 const installToast = document.getElementById('installToast');
@@ -1205,15 +1419,8 @@ if (isIOS() && !isStandalone()) setTimeout(() => showInstallToast('برای نص
 setTimeout(() => { if (!deferredPrompt && !isStandalone() && !isIOS()) showInstallToast('این برنامه را نصب کنید', 'راهنما'); }, 5000);
 
 /* ============================================================
-   لایتنر آلمانی
+   State & Utilities
    ============================================================ */
-
-const STORAGE = {
-  cards: 'leitner_de_v12',
-  settings: 'leitner_de_settings_v12',
-  stats: 'leitner_de_stats_v12',
-  cache: 'leitner_de_cache_v12'
-};
 
 const DEFAULT_SETTINGS = {
   intervals: { 1: 1, 2: 2, 3: 4, 4: 7, 5: 14 },
@@ -1235,10 +1442,8 @@ let settingsSelectedBox = 1;
 let editingCardId = null;
 let pendingImportData = null;
 
-/* قفل تعویض کارت */
 let isTransitioning = false;
 
-/* Speech synthesis state */
 let currentUtterance = null;
 let isSpeaking = false;
 
@@ -1271,71 +1476,112 @@ const shuffle = (arr) => {
   return a;
 };
 
-const save = () => {
+/* ============================================================
+   ترجمه دو مرحله‌ای: آلمانی → انگلیسی → فارسی
+   ============================================================ */
+
+const translateMyMemory = async (text, from, to) => {
   try {
-    localStorage.setItem(STORAGE.cards, JSON.stringify(cards));
-    localStorage.setItem(STORAGE.settings, JSON.stringify(settings));
-    localStorage.setItem(STORAGE.stats, JSON.stringify(stats));
-    localStorage.setItem(STORAGE.cache, JSON.stringify(cache));
-  } catch (e) { console.warn('Save error:', e); }
-};
-
-const load = () => {
-  try {
-    const c = localStorage.getItem(STORAGE.cards);
-    if (c) cards = JSON.parse(c);
-    const s = localStorage.getItem(STORAGE.settings);
-    if (s) {
-      const p = JSON.parse(s);
-      settings = { ...DEFAULT_SETTINGS, ...p, intervals: { ...DEFAULT_SETTINGS.intervals, ...(p.intervals || {}) } };
-    }
-    const st = localStorage.getItem(STORAGE.stats);
-    if (st) stats = { ...stats, ...JSON.parse(st) };
-    const ca = localStorage.getItem(STORAGE.cache);
-    if (ca) cache = JSON.parse(ca);
-  } catch (e) { console.warn('Load error:', e); }
-
-  cards.forEach(c => {
-    if (c.box === undefined) c.box = 1;
-    if (!c.nextReview) c.nextReview = today();
-    if (!c.createdAt) c.createdAt = today();
-    if (!c.history) c.history = [];
-  });
-};
-
-const fetchTranslation = async (word) => {
-  const key = word.toLowerCase();
-  if (cache[key]) return cache[key];
-
-  try {
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=de|fa`;
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`;
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 8000);
+    const t = setTimeout(() => ctrl.abort(), 7000);
     const res = await fetch(url, { signal: ctrl.signal });
     clearTimeout(t);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     if (data?.responseData?.translatedText) {
-      let text = data.responseData.translatedText.trim().replace(/^["']|["']$/g, '');
-      if (text.toLowerCase() === word.toLowerCase()) return null;
-      cache[key] = text;
-      save();
-      return text;
+      let out = data.responseData.translatedText.trim().replace(/^["']|["']$/g, '');
+      if (!out || out.toLowerCase() === text.toLowerCase()) return null;
+      return out;
     }
     return null;
   } catch (e) {
-    console.warn('Translation error:', e);
     return null;
   }
 };
 
-/* ==================== Speech Synthesis ==================== */
+const translateGoogle = async (text, from, to) => {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 7000);
+    const res = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(t);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (Array.isArray(data) && Array.isArray(data[0])) {
+      const translated = data[0].map(part => part[0]).filter(Boolean).join('');
+      if (!translated || translated.toLowerCase() === text.toLowerCase()) return null;
+      return translated;
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+};
+
+const translateDeToEn = async (word) => {
+  let result = await translateGoogle(word, 'de', 'en');
+  if (result) return result;
+  result = await translateMyMemory(word, 'de', 'en');
+  return result;
+};
+
+const translateEnToFa = async (word) => {
+  let result = await translateGoogle(word, 'en', 'fa');
+  if (result) return result;
+  result = await translateMyMemory(word, 'en', 'fa');
+  return result;
+};
+
+const translateDeToFaDirect = async (word) => {
+  let result = await translateGoogle(word, 'de', 'fa');
+  if (result) return result;
+  result = await translateMyMemory(word, 'de', 'fa');
+  return result;
+};
+
+const fetchTranslation = async (word) => {
+  if (!word) return null;
+  const key = word.toLowerCase();
+
+  if (cache[key]) return cache[key];
+
+  const english = await translateDeToEn(word);
+
+  if (english) {
+    const persian = await translateEnToFa(english);
+    if (persian) {
+      cache[key] = persian;
+      cache['__en__' + key] = english;
+      save();
+      return persian;
+    }
+  }
+
+  const direct = await translateDeToFaDirect(word);
+  if (direct) {
+    cache[key] = direct;
+    save();
+    return direct;
+  }
+
+  return null;
+};
+
+const fetchTranslationSmart = async (german) => {
+  const { word } = extractArticle(german);
+  return fetchTranslation(word);
+};
+
+/* ============================================================
+   Speech Synthesis
+   ============================================================ */
 const speechSupported = 'speechSynthesis' in window;
 
 const getGermanVoice = () => {
   if (!speechSupported) return null;
   const voices = speechSynthesis.getVoices();
-  // اولویت: آلمانی آلمان
   let voice = voices.find(v => v.lang === 'de-DE');
   if (!voice) voice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('de'));
   return voice || null;
@@ -1361,7 +1607,6 @@ const speakWord = (word) => {
   }
   if (!word) return;
 
-  // اگر در حال صحبت است، متوقف کن
   if (isSpeaking) {
     stopSpeaking();
     return;
@@ -1419,17 +1664,16 @@ const speakCurrentCard = () => {
   if (!currentCardId) return;
   const card = cards.find(c => c.id === currentCardId);
   if (!card) return;
-  // اولویت: کل کلمه با آرتیکل
-  const wordToSay = card.german || card.word;
-  speakWord(wordToSay);
+  speakWord(card.german || card.word);
 };
 
-/* اگر voice ها هنوز بارگذاری نشده‌اند، دوباره تلاش کن */
 if (speechSupported) {
-  speechSynthesis.onvoiceschanged = () => { /* کش به‌روزرسانی می‌شود */ };
+  speechSynthesis.onvoiceschanged = () => {};
 }
 
-/* ==================== لایتنر ==================== */
+/* ============================================================
+   Stats & Boxes
+   ============================================================ */
 const recordReview = (isCorrect, isHard) => {
   const d = today();
   if (!stats.reviews[d]) stats.reviews[d] = { correct: 0, wrong: 0, hard: 0 };
@@ -1494,7 +1738,6 @@ const clearCardContent = () => {
   $('backWord').textContent = '';
   $('backMeaning').textContent = '';
   $('backMeaning').className = 'card-meaning';
-  // پنهان‌کردن دکمه تلفظ
   const btn = $('btnSpeak');
   if (btn) btn.style.visibility = 'hidden';
 };
@@ -1530,7 +1773,6 @@ const renderCardSync = (card) => {
     $('backMeaning').className = 'card-meaning not-found';
   }
 
-  // نمایش دکمه تلفظ
   const btn = $('btnSpeak');
   if (btn) {
     btn.style.visibility = 'visible';
@@ -1576,8 +1818,7 @@ const showNextCard = async (delay = 0) => {
 
       if (card && card.box === activeBox) {
         if (!card.persian) {
-          const wordToTranslate = card.word || extractArticle(card.german).word || card.german;
-          const tr = await fetchTranslation(wordToTranslate);
+          const tr = await fetchTranslationSmart(card.german);
           if (tr) { card.persian = tr; save(); }
         }
 
@@ -1608,6 +1849,7 @@ const flipCard = () => {
   updateButtons();
 };
 
+/* ==================== پاسخ‌ها — تأخیر ۲۵۰ms ==================== */
 const afterAnswer = () => {
   stopSpeaking();
   clearCardContent();
@@ -1706,7 +1948,7 @@ const addCard = async () => {
   input.value = '';
   input.focus();
 
-  fetchTranslation(word || raw).then(tr => { if (tr) { card.persian = tr; save(); } });
+  fetchTranslationSmart(raw).then(tr => { if (tr) { card.persian = tr; save(); } });
 
   showStatus('موفق', 'success');
   renderBoxes();
@@ -1844,10 +2086,10 @@ const deleteCard = (cardId) => {
   showToastMessage('حذف شد');
 };
 
-/* ==================== Export ==================== */
+/* ==================== بارگیری (Export) ==================== */
 const exportCards = () => {
   const data = {
-    version: 1,
+    version: 14,
     exportedAt: new Date().toISOString(),
     cards: cards.map(c => ({
       german: c.german,
@@ -1857,7 +2099,9 @@ const exportCards = () => {
       box: c.box,
       nextReview: c.nextReview,
       createdAt: c.createdAt
-    }))
+    })),
+    settings: settings,
+    stats: stats
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -1868,10 +2112,10 @@ const exportCards = () => {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  showToastMessage('فایل پشتیبان دانلود شد');
+  showToastMessage('فایل پشتیبان بارگیری شد');
 };
 
-/* ==================== Import ==================== */
+/* ==================== بارگذاری (Import) ==================== */
 const handleFileSelect = (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -1894,7 +2138,7 @@ const handleFileSelect = (e) => {
       $('fileName').textContent = file.name;
       const validCount = data.cards.filter(c => c.german).length;
       $('importInfo').style.display = 'block';
-      $('importInfo').innerHTML = `فایل انتخاب شد: <strong>${validCount}</strong> واژه آماده بازیابی.`;
+      $('importInfo').innerHTML = `فایل انتخاب شد: <strong>${validCount}</strong> واژه آماده بارگذاری.`;
       $('btnImportDo').disabled = false;
     } catch (err) {
       showToastMessage('خطا در خواندن فایل', 2500);
@@ -1974,7 +2218,6 @@ const bind = () => {
   $('inputGerman').onkeydown = (e) => { if (e.key === 'Enter') addCard(); };
   $('btnTheme').onclick = toggleTheme;
 
-  // دکمه تلفظ
   $('btnSpeak').onclick = (e) => {
     e.stopPropagation();
     speakCurrentCard();
@@ -2015,7 +2258,6 @@ const bind = () => {
     } else if (e.key === 'ArrowDown' || e.key === '3') {
       if (isFlipped) markHard();
     } else if (e.key === 'p' || e.key === 'P') {
-      // میانبر تلفظ
       if (currentCardId) speakCurrentCard();
     } else if (e.key === 'Escape') {
       stopSpeaking();
@@ -2024,23 +2266,51 @@ const bind = () => {
     }
   });
 
+  /* ==================== ذخیره‌سازی در رویدادهای بحرانی ==================== */
   window.addEventListener('beforeunload', () => {
     stopSpeaking();
-    save();
+    saveSync();
   });
-  setInterval(save, 20000);
+
+  // وقتی اپ به پس‌زمینه می‌رود (مهم برای موبایل)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      saveSync();
+    }
+  });
+
+  // pagehide در iOS Safari
+  window.addEventListener('pagehide', () => {
+    saveSync();
+  });
+
+  // در iOS وقتی اپ frozen می‌شود
+  document.addEventListener('freeze', () => {
+    saveSync();
+  });
+
+  // هر بار کاربر فوکوس را از دست می‌دهد
+  window.addEventListener('blur', () => {
+    saveSync();
+  });
+
+  // ذخیره دوره‌ای
+  setInterval(save, 15000);
 };
 
-const init = () => {
-  load();
+/* ==================== Init ==================== */
+const init = async () => {
+  await load();
   applyTheme();
   bind();
   renderBoxes();
   buildSessionQueue();
   showNextCard(0);
   if (isStandalone() && installBtn) installBtn.classList.add('hidden');
-  // preload voices
   if (speechSupported) speechSynthesis.getVoices();
+
+  // یک بار دیگر ذخیره کن تا همه لایه‌ها همگام شوند
+  saveSync();
 };
 
 init();

@@ -341,6 +341,54 @@
     font-weight: 600;
   }
 
+  /* دکمه تلفظ */
+  .speak-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 100px;
+    border: 1.5px solid var(--accent);
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--accent);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all var(--transition);
+    margin-top: 6px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .speak-btn:hover {
+    background: var(--accent);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px var(--accent-glow);
+  }
+
+  .speak-btn:active {
+    transform: translateY(0);
+  }
+
+  .speak-btn.speaking {
+    background: var(--accent);
+    color: white;
+    animation: speakPulse 1.2s ease-in-out infinite;
+  }
+
+  .speak-btn .icon {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  @keyframes speakPulse {
+    0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+    50% { box-shadow: 0 0 0 12px transparent; }
+  }
+
   .review-actions {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -651,6 +699,8 @@
     color: white;
   }
 
+  .w-speak { background: var(--warning); color: #000 !important; }
+  .w-speak:hover { background: #d97706; }
   .w-edit { background: var(--accent); }
   .w-edit:hover { background: #4f46e5; }
   .w-del { background: var(--danger); }
@@ -870,6 +920,7 @@
     .card-word { font-size: 2.2rem; }
     .card-meaning { font-size: 1.25rem; }
     .card-article { font-size: 0.9rem; padding: 5px 16px; }
+    .speak-btn { padding: 9px 18px; font-size: 0.78rem; }
     .action-btn { padding: 12px 6px; }
     .action-btn .emoji { font-size: 1.3rem; }
     .action-btn .label { font-size: 0.75rem; }
@@ -925,6 +976,10 @@
           <div class="card-article" id="backArticle"></div>
           <div class="card-word" id="backWord"></div>
           <div class="card-meaning" id="backMeaning"></div>
+          <button class="speak-btn" id="btnSpeak" type="button">
+            <span class="icon">🔊</span>
+            <span>تلفظ</span>
+          </button>
         </div>
       </div>
     </div>
@@ -1043,7 +1098,7 @@ const manifestURL = URL.createObjectURL(new Blob([JSON.stringify(manifestData)],
 const ml = document.createElement('link'); ml.rel = 'manifest'; ml.href = manifestURL; document.head.appendChild(ml);
 
 const swCode = `
-const CACHE_NAME = 'leitner-de-v3';
+const CACHE_NAME = 'leitner-de-v4';
 self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./']).catch(()=>{}))); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', (e) => {
@@ -1154,10 +1209,10 @@ setTimeout(() => { if (!deferredPrompt && !isStandalone() && !isIOS()) showInsta
    ============================================================ */
 
 const STORAGE = {
-  cards: 'leitner_de_v11',
-  settings: 'leitner_de_settings_v11',
-  stats: 'leitner_de_stats_v11',
-  cache: 'leitner_de_cache_v11'
+  cards: 'leitner_de_v12',
+  settings: 'leitner_de_settings_v12',
+  stats: 'leitner_de_stats_v12',
+  cache: 'leitner_de_cache_v12'
 };
 
 const DEFAULT_SETTINGS = {
@@ -1182,6 +1237,10 @@ let pendingImportData = null;
 
 /* قفل تعویض کارت */
 let isTransitioning = false;
+
+/* Speech synthesis state */
+let currentUtterance = null;
+let isSpeaking = false;
 
 const $ = (id) => document.getElementById(id);
 
@@ -1270,6 +1329,107 @@ const fetchTranslation = async (word) => {
   }
 };
 
+/* ==================== Speech Synthesis ==================== */
+const speechSupported = 'speechSynthesis' in window;
+
+const getGermanVoice = () => {
+  if (!speechSupported) return null;
+  const voices = speechSynthesis.getVoices();
+  // اولویت: آلمانی آلمان
+  let voice = voices.find(v => v.lang === 'de-DE');
+  if (!voice) voice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('de'));
+  return voice || null;
+};
+
+const stopSpeaking = () => {
+  if (!speechSupported) return;
+  try { speechSynthesis.cancel(); } catch (e) {}
+  isSpeaking = false;
+  currentUtterance = null;
+  const btn = $('btnSpeak');
+  if (btn) {
+    btn.classList.remove('speaking');
+    const label = btn.querySelector('span:not(.icon)');
+    if (label) label.textContent = 'تلفظ';
+  }
+};
+
+const speakWord = (word) => {
+  if (!speechSupported) {
+    showToastMessage('مرورگر شما از تلفظ پشتیبانی نمی‌کند', 2500);
+    return;
+  }
+  if (!word) return;
+
+  // اگر در حال صحبت است، متوقف کن
+  if (isSpeaking) {
+    stopSpeaking();
+    return;
+  }
+
+  try {
+    speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(word);
+    utter.lang = 'de-DE';
+    utter.rate = 0.9;
+    utter.pitch = 1;
+    const voice = getGermanVoice();
+    if (voice) utter.voice = voice;
+
+    utter.onstart = () => {
+      isSpeaking = true;
+      const btn = $('btnSpeak');
+      if (btn) {
+        btn.classList.add('speaking');
+        const label = btn.querySelector('span:not(.icon)');
+        if (label) label.textContent = 'در حال تلفظ...';
+      }
+    };
+
+    utter.onend = () => {
+      isSpeaking = false;
+      currentUtterance = null;
+      const btn = $('btnSpeak');
+      if (btn) {
+        btn.classList.remove('speaking');
+        const label = btn.querySelector('span:not(.icon)');
+        if (label) label.textContent = 'تلفظ';
+      }
+    };
+
+    utter.onerror = () => {
+      isSpeaking = false;
+      const btn = $('btnSpeak');
+      if (btn) {
+        btn.classList.remove('speaking');
+        const label = btn.querySelector('span:not(.icon)');
+        if (label) label.textContent = 'تلفظ';
+      }
+    };
+
+    currentUtterance = utter;
+    speechSynthesis.speak(utter);
+  } catch (e) {
+    console.warn('Speech error:', e);
+    isSpeaking = false;
+  }
+};
+
+const speakCurrentCard = () => {
+  if (!currentCardId) return;
+  const card = cards.find(c => c.id === currentCardId);
+  if (!card) return;
+  // اولویت: کل کلمه با آرتیکل
+  const wordToSay = card.german || card.word;
+  speakWord(wordToSay);
+};
+
+/* اگر voice ها هنوز بارگذاری نشده‌اند، دوباره تلاش کن */
+if (speechSupported) {
+  speechSynthesis.onvoiceschanged = () => { /* کش به‌روزرسانی می‌شود */ };
+}
+
+/* ==================== لایتنر ==================== */
 const recordReview = (isCorrect, isHard) => {
   const d = today();
   if (!stats.reviews[d]) stats.reviews[d] = { correct: 0, wrong: 0, hard: 0 };
@@ -1310,6 +1470,7 @@ const buildSessionQueue = () => {
 };
 
 const switchBox = (box) => {
+  stopSpeaking();
   activeBox = box;
   currentCardId = null;
   isFlipped = false;
@@ -1333,6 +1494,9 @@ const clearCardContent = () => {
   $('backWord').textContent = '';
   $('backMeaning').textContent = '';
   $('backMeaning').className = 'card-meaning';
+  // پنهان‌کردن دکمه تلفظ
+  const btn = $('btnSpeak');
+  if (btn) btn.style.visibility = 'hidden';
 };
 
 const showEmptyCard = () => {
@@ -1344,7 +1508,6 @@ const showEmptyCard = () => {
   updateButtons();
 };
 
-/* رندر همگام کارت — بدون درخواست async */
 const renderCardSync = (card) => {
   clearCardContent();
 
@@ -1367,6 +1530,15 @@ const renderCardSync = (card) => {
     $('backMeaning').className = 'card-meaning not-found';
   }
 
+  // نمایش دکمه تلفظ
+  const btn = $('btnSpeak');
+  if (btn) {
+    btn.style.visibility = 'visible';
+    btn.classList.remove('speaking');
+    const label = btn.querySelector('span:not(.icon)');
+    if (label) label.textContent = 'تلفظ';
+  }
+
   $('card').classList.remove('flipped');
   $('card').classList.add('clickable');
   isFlipped = false;
@@ -1374,13 +1546,12 @@ const renderCardSync = (card) => {
   updateButtons();
 };
 
-/* نمایش کارت بعدی با تأخیر اختیاری */
 const showNextCard = async (delay = 0) => {
   if (isTransitioning) return;
   isTransitioning = true;
 
   try {
-    // ۱. پاک‌سازی فوری کارت قبلی
+    stopSpeaking();
     clearCardContent();
     $('card').classList.remove('flipped', 'clickable');
     $('reviewActions').classList.remove('visible');
@@ -1388,33 +1559,28 @@ const showNextCard = async (delay = 0) => {
     isFlipped = false;
     updateButtons();
 
-    // ۲. تأخیر قبل از نمایش کارت بعدی
     if (delay > 0) {
       await new Promise(resolve => setTimeout(resolve, delay));
     }
 
-    // ۳. اگر صف خالی است، خارج شو
     if (sessionQueue.length === 0) {
       isTransitioning = false;
       return;
     }
     if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
 
-    // ۴. اولین کارت معتبر را پیدا کن
     let attempts = 0;
     while (attempts < sessionQueue.length) {
       const id = sessionQueue[sessionPosition];
       const card = cards.find(c => c.id === id);
 
       if (card && card.box === activeBox) {
-        // اگر معنی ندارد، قبل از نمایش از API بگیر
         if (!card.persian) {
           const wordToTranslate = card.word || extractArticle(card.german).word || card.german;
           const tr = await fetchTranslation(wordToTranslate);
           if (tr) { card.persian = tr; save(); }
         }
 
-        // رندر کارت با معنی کامل
         currentCardId = card.id;
         isFlipped = false;
         renderCardSync(card);
@@ -1426,7 +1592,6 @@ const showNextCard = async (delay = 0) => {
       attempts++;
     }
 
-    // هیچ کارت معتبری پیدا نشد
     sessionQueue = [];
     sessionPosition = 0;
     showEmptyCard();
@@ -1443,17 +1608,14 @@ const flipCard = () => {
   updateButtons();
 };
 
-/* ==================== پاسخ‌ها با تأخیر نیم‌ثانیه ==================== */
-
 const afterAnswer = () => {
-  // پاک‌سازی فوری و برگرداندن کارت به حالت رو
+  stopSpeaking();
   clearCardContent();
   $('card').classList.remove('flipped', 'clickable');
   $('reviewActions').classList.remove('visible');
   currentCardId = null;
   isFlipped = false;
   updateButtons();
-  // نمایش کارت بعدی با تأخیر نیم‌ثانیه
   showNextCard(250);
 };
 
@@ -1510,7 +1672,6 @@ const markHard = () => {
   save();
   showStatus('موفق', 'success');
 
-  // انتقال به انتهای صف
   const idx = sessionQueue.indexOf(card.id);
   if (idx !== -1) { sessionQueue.splice(idx, 1); sessionQueue.push(card.id); }
   if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
@@ -1606,10 +1767,12 @@ const renderWordList = () => {
         <div class="w-persian">${escapeHtml(card.persian || '—')}</div>
       </div>
       <div class="w-actions">
+        <button class="w-speak" title="تلفظ">🔊</button>
         <button class="w-edit" title="ویرایش">✏️</button>
         <button class="w-del" title="حذف">🗑️</button>
       </div>
     `;
+    item.querySelector('.w-speak').onclick = () => speakWord(card.german || card.word);
     item.querySelector('.w-edit').onclick = () => openEditModal(card.id);
     item.querySelector('.w-del').onclick = () => deleteCard(card.id);
     list.appendChild(item);
@@ -1811,6 +1974,12 @@ const bind = () => {
   $('inputGerman').onkeydown = (e) => { if (e.key === 'Enter') addCard(); };
   $('btnTheme').onclick = toggleTheme;
 
+  // دکمه تلفظ
+  $('btnSpeak').onclick = (e) => {
+    e.stopPropagation();
+    speakCurrentCard();
+  };
+
   $('btnSettings').onclick = openSettings;
   $('btnCloseSettings').onclick = () => $('settingsModal').classList.remove('show');
   $('settingsModal').onclick = (e) => { if (e.target === $('settingsModal')) $('settingsModal').classList.remove('show'); };
@@ -1845,13 +2014,20 @@ const bind = () => {
       if (isFlipped) markWrong();
     } else if (e.key === 'ArrowDown' || e.key === '3') {
       if (isFlipped) markHard();
+    } else if (e.key === 'p' || e.key === 'P') {
+      // میانبر تلفظ
+      if (currentCardId) speakCurrentCard();
     } else if (e.key === 'Escape') {
+      stopSpeaking();
       $('settingsModal').classList.remove('show');
       $('editModal').classList.remove('show');
     }
   });
 
-  window.addEventListener('beforeunload', save);
+  window.addEventListener('beforeunload', () => {
+    stopSpeaking();
+    save();
+  });
   setInterval(save, 20000);
 };
 
@@ -1863,6 +2039,8 @@ const init = () => {
   buildSessionQueue();
   showNextCard(0);
   if (isStandalone() && installBtn) installBtn.classList.add('hidden');
+  // preload voices
+  if (speechSupported) speechSynthesis.getVoices();
 };
 
 init();

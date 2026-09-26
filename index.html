@@ -587,11 +587,25 @@
     min-width: 0;
   }
 
-  .suggest-empty {
-    padding: 14px;
-    text-align: center;
+  .suggest-item .s-add-badge {
+    font-size: 0.65rem;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: var(--success);
+    color: white;
+    font-weight: 800;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .suggest-item.added {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .suggest-item.added .s-add-badge {
+    background: var(--surface-3);
     color: var(--text-dim);
-    font-size: 0.85rem;
   }
 
   .suggest-hint {
@@ -781,21 +795,6 @@
   .w-del { background: var(--danger); }
   .w-del:hover { background: #be123c; }
 
-  .w-add {
-    background: var(--success) !important;
-    padding: 0 12px !important;
-    width: auto !important;
-    font-size: 0.72rem !important;
-    font-weight: 800 !important;
-    gap: 4px;
-  }
-  .w-add:hover { background: #059669 !important; }
-  .w-add.added {
-    background: var(--surface-3) !important;
-    color: var(--text-dim) !important;
-    cursor: not-allowed !important;
-  }
-
   .empty-list {
     text-align: center;
     color: var(--text-dim);
@@ -973,31 +972,69 @@
     color: var(--text);
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     flex-wrap: wrap;
   }
 
-  .offline-item .o-article {
+  /* آرتیکل مخفی */
+  .o-article-hidden {
     display: inline-block;
-    padding: 2px 10px;
+    padding: 3px 12px;
     border-radius: 100px;
     font-size: 0.7rem;
     font-weight: 900;
     letter-spacing: 0.5px;
     text-transform: lowercase;
+    cursor: pointer;
+    background: var(--surface-3);
+    color: var(--text-dim);
+    user-select: none;
+    transition: all var(--transition);
+    min-width: 36px;
+    text-align: center;
   }
 
-  .offline-item .o-article.der { background: #3b82f6; color: white; }
-  .offline-item .o-article.die { background: #ec4899; color: white; }
-  .offline-item .o-article.das { background: #10b981; color: white; }
+  .o-article-hidden:hover {
+    background: var(--border-strong);
+    color: var(--text);
+  }
 
-  .offline-item .o-persian {
+  .o-article-hidden.revealed {
+    color: white;
+  }
+
+  .o-article-hidden.revealed.der { background: #3b82f6; }
+  .o-article-hidden.revealed.die { background: #ec4899; }
+  .o-article-hidden.revealed.das { background: #10b981; }
+
+  /* معنی مخفی */
+  .o-persian-hidden {
     font-size: 0.82rem;
-    color: #c084fc;
+    color: var(--text-dim);
     margin-top: 4px;
     font-weight: 600;
     direction: rtl;
     text-align: right;
+    cursor: pointer;
+    user-select: none;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: var(--surface-3);
+    display: inline-block;
+    transition: all var(--transition);
+    min-width: 60px;
+  }
+
+  .o-persian-hidden:hover {
+    background: var(--border-strong);
+    color: var(--text-muted);
+  }
+
+  .o-persian-hidden.revealed {
+    background: transparent;
+    color: #c084fc;
+    cursor: default;
+    padding: 4px 0;
   }
 
   .offline-item .o-actions {
@@ -11543,7 +11580,7 @@ const manifestURL = URL.createObjectURL(new Blob([JSON.stringify(manifestData)],
 const ml = document.createElement('link'); ml.rel = 'manifest'; ml.href = manifestURL; document.head.appendChild(ml);
 
 const swCode = `
-const CACHE_NAME = 'leitner-de-v8';
+const CACHE_NAME = 'leitner-de-v9';
 self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./']).catch(()=>{}))); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', (e) => {
@@ -11619,9 +11656,9 @@ const idbGet = async (key) => {
 };
 
 const STORAGE = {
-  cards: 'leitner_de_v16',
-  settings: 'leitner_de_settings_v16',
-  stats: 'leitner_de_stats_v16'
+  cards: 'leitner_de_v17',
+  settings: 'leitner_de_settings_v17',
+  stats: 'leitner_de_stats_v17'
 };
 
 let saveInProgress = false;
@@ -11634,7 +11671,7 @@ const save = async () => {
       settings: JSON.stringify(settings),
       stats: JSON.stringify(stats),
       savedAt: Date.now(),
-      version: 16
+      version: 17
     };
     try {
       localStorage.setItem(STORAGE.cards, payload.cards);
@@ -11661,7 +11698,7 @@ const saveSync = () => {
     settings: JSON.stringify(settings),
     stats: JSON.stringify(stats),
     savedAt: Date.now(),
-    version: 16
+    version: 17
   }).catch(() => {});
 };
 
@@ -11887,7 +11924,6 @@ const initOfflineDB = () => {
   console.log(`📚 دیتابیس آفلاین: ${offlineDB.length} کلمه`);
 };
 
-/* جستجو در دیتابیس آفلاین */
 const searchOfflineDB = (query, maxResults = 8) => {
   const q = String(query || '').trim().toLowerCase();
   if (!q || q.length < 2) return [];
@@ -11917,7 +11953,6 @@ const searchOfflineDB = (query, maxResults = 8) => {
   return results.slice(0, maxResults).map(r => r.item);
 };
 
-/* پیدا کردن یک کلمه خاص در دیتابیس */
 const findInOfflineDB = (german) => {
   if (!german) return null;
   const trimmed = String(german).trim().toLowerCase();
@@ -11945,33 +11980,69 @@ const renderSuggestBox = (query) => {
     return;
   }
 
+  // کلمات موجود در لایتنر
+  const existingGerman = new Set(cards.map(c => c.german.toLowerCase()));
+
   box.innerHTML = `
-    <div class="suggest-hint">💡 ${results.length} پیشنهاد از دیتابیس آفلاین</div>
-    ${results.map((item, i) => `
-      <div class="suggest-item" data-index="${i}">
-        <div class="s-german">
-          ${item.article ? `<span class="s-article">${escapeHtml(item.article)}</span>` : ''}
-          <span class="s-word">${escapeHtml(item.word)}</span>
+    <div class="suggest-hint">💡 ${results.length} پیشنهاد — روی هر کلمه کلیک کنید تا مستقیم اضافه شود</div>
+    ${results.map((item, i) => {
+      const isAdded = existingGerman.has(item.german.toLowerCase());
+      return `
+        <div class="suggest-item ${isAdded ? 'added' : ''}" data-index="${i}">
+          <div class="s-german">
+            ${item.article ? `<span class="s-article">${escapeHtml(item.article)}</span>` : ''}
+            <span class="s-word">${escapeHtml(item.word)}</span>
+          </div>
+          <div class="s-persian">${escapeHtml(item.persian || '—')}</div>
+          <span class="s-add-badge">${isAdded ? '✓ اضافه شده' : '➕ افزودن'}</span>
         </div>
-        <div class="s-persian">${escapeHtml(item.persian || '—')}</div>
-      </div>
-    `).join('')}
+      `;
+    }).join('')}
   `;
   box.classList.add('show');
   suggestIndex = -1;
 
   box.querySelectorAll('.suggest-item').forEach(el => {
-    el.addEventListener('click', () => {
+    if (el.classList.contains('added')) return;
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const idx = parseInt(el.dataset.index);
-      selectSuggestion(results[idx]);
+      addFromSuggest(results[idx]);
     });
   });
 };
 
-const selectSuggestion = (item) => {
-  $('inputGerman').value = item.german;
+/* ⭐ افزودن مستقیم از Suggest Box */
+const addFromSuggest = (item) => {
+  if (cards.some(c => c.german.toLowerCase() === item.german.toLowerCase())) {
+    showToastMessage('قبلاً اضافه شده');
+    hideSuggestBox();
+    return;
+  }
+
+  const card = {
+    id: uid(),
+    german: item.german,
+    word: item.word,
+    article: item.article,
+    persian: item.persian,
+    box: 1,
+    nextReview: today(),
+    createdAt: today(),
+    history: []
+  };
+  cards.push(card);
+  save();
+  $('inputGerman').value = '';
   hideSuggestBox();
-  $('inputGerman').focus();
+  renderBoxes();
+  if (activeBox === 1 && !currentCardId) {
+    buildSessionQueue();
+    showNextCard(0);
+  }
+  showToastMessage(`«${item.word}» به باکس ۱ اضافه شد`);
+  showStatus('موفق', 'success');
 };
 
 const hideSuggestBox = () => {
@@ -11981,7 +12052,7 @@ const hideSuggestBox = () => {
 };
 
 const highlightSuggest = (dir) => {
-  const items = $('suggestBox').querySelectorAll('.suggest-item');
+  const items = $('suggestBox').querySelectorAll('.suggest-item:not(.added)');
   if (items.length === 0) return;
   items.forEach(el => el.classList.remove('active'));
   suggestIndex = (suggestIndex + dir + items.length) % items.length;
@@ -11990,7 +12061,7 @@ const highlightSuggest = (dir) => {
 };
 
 /* ============================================================
-   ترجمه آنلاین (فقط اگر فعال باشد)
+   ترجمه آنلاین
    ============================================================ */
 const translateGoogle = async (text, from, to) => {
   try {
@@ -12031,19 +12102,13 @@ const translateMyMemory = async (text, from, to) => {
 const fetchOnlineTranslation = async (word) => {
   if (!settings.onlineTranslate) return null;
   if (!word) return null;
-
-  // مرحله ۱: آلمانی → انگلیسی
   let english = await translateGoogle(word, 'de', 'en');
   if (!english) english = await translateMyMemory(word, 'de', 'en');
-
   if (english) {
-    // مرحله ۲: انگلیسی → فارسی
     let persian = await translateGoogle(english, 'en', 'fa');
     if (!persian) persian = await translateMyMemory(english, 'en', 'fa');
     if (persian) return persian;
   }
-
-  // fallback: مستقیم آلمانی → فارسی
   let direct = await translateGoogle(word, 'de', 'fa');
   if (!direct) direct = await translateMyMemory(word, 'de', 'fa');
   return direct;
@@ -12365,7 +12430,7 @@ const showStatus = (msg, type = 'success') => {
 };
 
 /* ============================================================
-   افزودن کارت
+   افزودن کارت با دکمه
    ============================================================ */
 const addCard = async () => {
   const input = $('inputGerman');
@@ -12380,16 +12445,12 @@ const addCard = async () => {
   let article = extArt;
   let word = extWord;
 
-  // ⭐ جستجو در دیتابیس آفلاین
   const dbMatch = findInOfflineDB(raw);
-
   if (dbMatch) {
-    // کلمه در دیتابیس آفلاین موجود است → از آن استفاده کن، هرگز آنلاین نرو
     persian = dbMatch.persian;
     article = dbMatch.article || article;
     word = dbMatch.word || word;
   } else if (settings.onlineTranslate) {
-    // فقط اگر ترجمه آنلاین فعال باشد و کلمه در دیتابیس نبود
     showStatus('در حال ترجمه آنلاین...', 'warning');
     const tr = await fetchOnlineTranslation(word || raw);
     if (tr) persian = tr;
@@ -12541,10 +12602,13 @@ const deleteCard = (cardId) => {
 };
 
 /* ============================================================
-   📖 Offline DB Modal
+   📖 Offline DB Modal — با آرتیکل و معنی مخفی
    ============================================================ */
+let offlineRevealed = new Set(); // مجموعه شناسه‌های reveal شده
+
 const openOfflineModal = () => {
   offlineSearchQuery = '';
+  offlineRevealed = new Set();
   $('offlineSearchInput').value = '';
   renderOfflineList();
   $('offlineModal').classList.add('show');
@@ -12555,12 +12619,10 @@ const renderOfflineList = () => {
   const list = $('offlineList');
   const stats = $('offlineStats');
 
-  // مرتب‌سازی الفبایی آلمانی
   const sorted = [...offlineDB].sort((a, b) =>
     a.german.toLowerCase().localeCompare(b.german.toLowerCase(), 'de')
   );
 
-  // فیلتر جستجو
   const q = offlineSearchQuery.trim().toLowerCase();
   const filtered = q ? sorted.filter(item =>
     item.german.toLowerCase().includes(q) ||
@@ -12575,21 +12637,36 @@ const renderOfflineList = () => {
     return;
   }
 
-  // لیست کلمات موجود در لایتنر (برای چک کردن اضافه شده)
   const existingGerman = new Set(cards.map(c => c.german.toLowerCase()));
 
   list.innerHTML = '';
-  filtered.forEach(item => {
+  filtered.forEach((item, index) => {
     const isAdded = existingGerman.has(item.german.toLowerCase());
+    const key = item.german;
+    const artRevealed = offlineRevealed.has(key + '_art');
+    const meanRevealed = offlineRevealed.has(key + '_mean');
+
     const el = document.createElement('div');
     el.className = 'offline-item';
+
+    const hasArticle = !!item.article;
+    const artClass = hasArticle ? item.article : '';
+
     el.innerHTML = `
       <div class="o-info">
         <div class="o-german">
-          ${item.article ? `<span class="o-article ${item.article}">${escapeHtml(item.article)}</span>` : ''}
+          ${hasArticle ? `
+            <span class="o-article-hidden ${artClass} ${artRevealed ? 'revealed' : ''}"
+                  data-key="${escapeHtml(key)}_art" title="کلیک برای نمایش آرتیکل">
+              ${artRevealed ? escapeHtml(item.article) : '?'}
+            </span>
+          ` : ''}
           <span>${escapeHtml(item.word)}</span>
         </div>
-        <div class="o-persian">${escapeHtml(item.persian || '—')}</div>
+        <div class="o-persian-hidden ${meanRevealed ? 'revealed' : ''}"
+             data-key="${escapeHtml(key)}_mean" title="کلیک برای نمایش معنی">
+          ${meanRevealed ? escapeHtml(item.persian || '—') : '•••••'}
+        </div>
       </div>
       <div class="o-actions">
         <button class="o-speak" title="تلفظ">🔊</button>
@@ -12598,21 +12675,58 @@ const renderOfflineList = () => {
         </button>
       </div>
     `;
-    el.querySelector('.o-speak').onclick = () => speakWord(item.german || item.word);
-    if (!isAdded) {
-      el.querySelector('.o-add').onclick = () => addFromOffline(item);
+
+    // رویداد کلیک روی آرتیکل مخفی (مستقل)
+    const artEl = el.querySelector('.o-article-hidden');
+    if (artEl) {
+      artEl.onclick = (e) => {
+        e.stopPropagation();
+        const k = artEl.dataset.key;
+        if (offlineRevealed.has(k)) {
+          offlineRevealed.delete(k);
+        } else {
+          offlineRevealed.add(k);
+        }
+        renderOfflineList();
+      };
     }
+
+    // رویداد کلیک روی معنی مخفی (مستقل)
+    const meanEl = el.querySelector('.o-persian-hidden');
+    if (meanEl) {
+      meanEl.onclick = (e) => {
+        e.stopPropagation();
+        const k = meanEl.dataset.key;
+        if (offlineRevealed.has(k)) {
+          offlineRevealed.delete(k);
+        } else {
+          offlineRevealed.add(k);
+        }
+        renderOfflineList();
+      };
+    }
+
+    el.querySelector('.o-speak').onclick = (e) => {
+      e.stopPropagation();
+      speakWord(item.german || item.word);
+    };
+
+    if (!isAdded) {
+      el.querySelector('.o-add').onclick = (e) => {
+        e.stopPropagation();
+        addFromOffline(item);
+      };
+    }
+
     list.appendChild(el);
   });
 };
 
 const addFromOffline = (item) => {
-  // چک تکراری
   if (cards.some(c => c.german.toLowerCase() === item.german.toLowerCase())) {
     showToastMessage('قبلاً اضافه شده');
     return;
   }
-
   const card = {
     id: uid(),
     german: item.german,
@@ -12638,7 +12752,7 @@ const addFromOffline = (item) => {
 /* ==================== بارگیری ==================== */
 const exportCards = () => {
   const data = {
-    version: 16,
+    version: 17,
     exportedAt: new Date().toISOString(),
     cards: cards.map(c => ({
       german: c.german,
@@ -12791,13 +12905,25 @@ const bind = () => {
       highlightSuggest(-1);
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (isOpen && suggestIndex >= 0) {
-        const items = box.querySelectorAll('.suggest-item');
-        const idx = parseInt(items[suggestIndex].dataset.index);
-        const results = searchOfflineDB(inputEl.value.trim());
-        if (results[idx]) {
-          selectSuggestion(results[idx]);
-          return;
+      if (isOpen) {
+        const activeEl = box.querySelector('.suggest-item.active:not(.added)');
+        if (activeEl) {
+          const idx = parseInt(activeEl.dataset.index);
+          const results = searchOfflineDB(inputEl.value.trim());
+          if (results[idx]) {
+            addFromSuggest(results[idx]);
+            return;
+          }
+        }
+        // اگر پیشنهاد فعالی نیست، اولین پیشنهاد را اضافه کن
+        const firstEl = box.querySelector('.suggest-item:not(.added)');
+        if (firstEl) {
+          const idx = parseInt(firstEl.dataset.index);
+          const results = searchOfflineDB(inputEl.value.trim());
+          if (results[idx]) {
+            addFromSuggest(results[idx]);
+            return;
+          }
         }
       }
       addCard();
@@ -12805,7 +12931,7 @@ const bind = () => {
       hideSuggestBox();
     } else if (e.key === 'Tab' && isOpen) {
       e.preventDefault();
-      if (suggestIndex === -1 && box.querySelectorAll('.suggest-item').length > 0) {
+      if (suggestIndex === -1) {
         highlightSuggest(1);
       } else {
         highlightSuggest(e.shiftKey ? -1 : 1);
@@ -12814,7 +12940,7 @@ const bind = () => {
   });
 
   inputEl.addEventListener('blur', () => {
-    setTimeout(() => hideSuggestBox(), 200);
+    setTimeout(() => hideSuggestBox(), 250);
   });
 
   /* ==================== Settings ==================== */

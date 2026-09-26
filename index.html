@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>لایتنر آلمانی</title>
 
-<meta name="description" content="لایتنر پنج‌باکسی برای یادگیری لغات آلمانی به فارسی">
+<meta name="description" content="لایتنر شش‌باکسی برای یادگیری لغات آلمانی به فارسی">
 <meta name="theme-color" content="#0b0f1a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -123,47 +123,48 @@
     justify-content: space-between;
     align-items: center;
     padding: 4px 0;
-    gap: 8px;
+    gap: 6px;
+    flex-wrap: wrap;
   }
 
-  .logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 
   .logo-mark {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 14px;
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     box-shadow: 0 8px 24px var(--accent-glow);
   }
 
   .logo-text h1 {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 800;
     letter-spacing: -0.3px;
   }
 
   .logo-text .sub {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     color: var(--text-dim);
     margin-top: 1px;
     font-weight: 500;
   }
 
-  .header-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .header-actions { display: flex; gap: 5px; flex-wrap: wrap; }
 
   .icon-btn {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border-radius: 12px;
     background: var(--surface);
     border: 1px solid var(--border);
     color: var(--text);
     cursor: pointer;
-    font-size: 1.05rem;
+    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -177,35 +178,25 @@
     transform: translateY(-2px);
   }
 
+  .icon-btn.user-logged-in {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+  }
+
   #btnInstall {
     background: linear-gradient(135deg, #10b981, #059669);
     color: white;
     border: none;
     width: auto;
-    padding: 0 14px;
-    font-size: 0.8rem;
+    padding: 0 12px;
+    font-size: 0.75rem;
     font-weight: 800;
-    gap: 6px;
+    gap: 5px;
     box-shadow: 0 6px 20px var(--success-glow);
   }
 
-  #btnInstall:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 28px var(--success-glow);
-  }
-
   #btnInstall.hidden { display: none; }
-
-  #btnOffline {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white;
-    border: none;
-    box-shadow: 0 6px 20px var(--warning-glow);
-  }
-
-  #btnOffline:hover {
-    box-shadow: 0 10px 28px var(--warning-glow);
-  }
 
   #btnMastered {
     background: linear-gradient(135deg, #eab308, #ca8a04);
@@ -214,13 +205,23 @@
     box-shadow: 0 6px 20px var(--gold-glow);
   }
 
-  #btnMastered:hover {
-    box-shadow: 0 10px 28px var(--gold-glow);
+  #btnOffline {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    border: none;
+    box-shadow: 0 6px 20px var(--warning-glow);
+  }
+
+  #btnUser {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    border: none;
+    box-shadow: 0 6px 20px var(--accent-glow);
   }
 
   .boxes-bar {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 6px;
   }
 
@@ -248,12 +249,6 @@
     box-shadow: 0 0 0 3px var(--accent-glow);
   }
 
-  .box-chip[data-box="6"].active {
-    border-color: var(--gold);
-    background: linear-gradient(180deg, var(--surface), rgba(234, 179, 8, 0.08));
-    box-shadow: 0 0 0 3px var(--gold-glow);
-  }
-
   .box-chip .chip-label {
     font-size: 0.6rem;
     color: var(--text-dim);
@@ -271,7 +266,6 @@
   }
 
   .box-chip.active .chip-count { color: #818cf8; }
-  .box-chip[data-box="6"].active .chip-count { color: var(--gold); }
 
   .card-area {
     perspective: 1600px;
@@ -390,7 +384,6 @@
     transition: all var(--transition);
     margin-top: 6px;
     user-select: none;
-    -webkit-user-select: none;
   }
 
   .speak-btn:hover {
@@ -399,8 +392,6 @@
     transform: translateY(-2px);
     box-shadow: 0 10px 28px var(--accent-glow);
   }
-
-  .speak-btn:active { transform: translateY(0); }
 
   .speak-btn.speaking {
     background: var(--accent);
@@ -445,8 +436,6 @@
     align-items: center;
     gap: 5px;
     font-family: inherit;
-    position: relative;
-    overflow: hidden;
   }
 
   .action-btn .emoji { font-size: 1.5rem; line-height: 1; }
@@ -458,7 +447,6 @@
     filter: brightness(1.1);
   }
 
-  .action-btn:not(:disabled):active { transform: translateY(-1px); }
   .action-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
   .btn-wrong { background: linear-gradient(135deg, #f43f5e, #be123c); box-shadow: 0 8px 24px var(--danger-glow); }
@@ -1075,14 +1063,12 @@
     cursor: not-allowed;
   }
 
-  /* باکس تثبیت‌شده (6) */
-  .mastered-header {
-    text-align: center;
-    padding: 8px 0;
-    font-size: 0.9rem;
-    color: var(--gold);
-    font-weight: 800;
+  .o-back {
+    background: var(--accent);
+    min-width: 80px;
+    justify-content: center;
   }
+  .o-back:hover { background: #4f46e5; }
 
   .install-toast {
     position: fixed;
@@ -1216,14 +1202,126 @@
     box-shadow: 0 10px 28px var(--danger-glow);
   }
 
+  /* Auth Modal */
+  .auth-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface-2);
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+
+  .auth-tab {
+    flex: 1;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all var(--transition);
+    font-family: inherit;
+  }
+
+  .auth-tab:hover { color: var(--text); }
+  .auth-tab.active { background: var(--accent); color: white; }
+
+  .auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .auth-field label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .auth-field input {
+    background: var(--surface-2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    font-family: inherit;
+    transition: all var(--transition);
+    direction: ltr;
+    text-align: left;
+  }
+
+  .auth-field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .auth-user-info {
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .auth-user-info .avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: white;
+    margin: 0 auto 10px;
+    text-transform: uppercase;
+  }
+
+  .auth-user-info .username {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text);
+    direction: ltr;
+  }
+
+  .auth-user-info .hint {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .auth-status {
+    background: var(--surface-2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 12px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .auth-status.error { color: var(--danger); background: rgba(244, 63, 94, 0.1); }
+  .auth-status.success { color: var(--success); background: rgba(16, 185, 129, 0.1); }
+
   @media (max-width: 640px) {
     body { padding: 14px; padding-top: max(14px, env(safe-area-inset-top)); padding-bottom: max(14px, env(safe-area-inset-bottom)); }
     .app { gap: 14px; }
-    .logo-mark { width: 40px; height: 40px; font-size: 1.15rem; }
+    .logo-mark { width: 38px; height: 38px; font-size: 1.1rem; }
     .logo-text h1 { font-size: 0.95rem; }
     .logo-text .sub { font-size: 0.6rem; }
     .icon-btn { width: 36px; height: 36px; font-size: 0.9rem; }
-    #btnInstall { padding: 0 8px; font-size: 0.68rem; height: 36px; }
     .boxes-bar { gap: 4px; }
     .box-chip { padding: 8px 3px; }
     .box-chip .chip-label { font-size: 0.55rem; }
@@ -1244,19 +1342,6 @@
     .modal { padding: 18px; }
     .box-sel-btn { font-size: 0.65rem; padding: 6px 2px; }
   }
-
-  @media (min-width: 900px) {
-    .app { max-width: 780px; gap: 22px; }
-    .card { height: 360px; }
-    .card-area { min-height: 360px; }
-    .card-word { font-size: 3.5rem; }
-    .card-meaning { font-size: 1.8rem; }
-    .box-chip { padding: 14px 8px; }
-    .box-chip .chip-count { font-size: 1.5rem; }
-    .action-btn { padding: 18px 12px; }
-    .action-btn .emoji { font-size: 1.7rem; }
-    .action-btn .label { font-size: 0.95rem; }
-  }
 </style>
 </head>
 <body>
@@ -1267,14 +1352,15 @@
       <div class="logo-mark">📦</div>
       <div class="logo-text">
         <h1>لایتنر آلمانی</h1>
-        <div class="sub">شش باکس · مرور فاصله‌دار</div>
+        <div class="sub">پنج باکس · مرور فاصله‌دار</div>
       </div>
     </div>
     <div class="header-actions">
-      <button class="icon-btn hidden" id="btnInstall" title="نصب برنامه">📲 <span>نصب</span></button>
+      <button class="icon-btn hidden" id="btnInstall" title="نصب برنامه">📲</button>
       <button class="icon-btn" id="btnMastered" title="باکس تثبیت‌شده">🏆</button>
-      <button class="icon-btn" id="btnOffline" title="واژه‌نامه آفلاین">📖</button>
+      <button class="icon-btn" id="btnOffline" title="واژه‌نامه">📖</button>
       <button class="icon-btn" id="btnTheme" title="تغییر تم">🌙</button>
+      <button class="icon-btn" id="btnUser" title="ورود / ثبت‌نام">👤</button>
       <button class="icon-btn" id="btnSettings" title="تنظیمات">⚙️</button>
     </div>
   </header>
@@ -1339,6 +1425,58 @@
   <span class="toast-text" id="toastText">این برنامه را نصب کنید</span>
   <button class="toast-action" id="toastAction">نصب</button>
   <button class="toast-close" id="toastClose">✕</button>
+</div>
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <h3 id="authTitle">👤 ورود / ثبت‌نام</h3>
+
+    <!-- حالت وارد شده -->
+    <div id="authLoggedIn" style="display:none;">
+      <div class="auth-user-info">
+        <div class="avatar" id="authAvatar">U</div>
+        <div class="username" id="authUsername">username</div>
+        <div class="hint">شما وارد شده‌اید</div>
+      </div>
+      <div class="auth-status" id="authSyncStatus">☁️ در حال همگام‌سازی...</div>
+      <div class="modal-actions" style="justify-content:space-between;">
+        <button class="btn btn-danger" id="btnLogout">🚪 خروج</button>
+        <button class="btn btn-primary" id="btnForceSync">🔄 همگام‌سازی</button>
+      </div>
+      <button class="btn btn-ghost" id="btnCloseAuthLoggedIn" style="width:100%;margin-top:10px;">بستن</button>
+    </div>
+
+    <!-- حالت وارد نشده -->
+    <div id="authNotLoggedIn">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">ورود</button>
+        <button class="auth-tab" data-tab="register">ثبت‌نام</button>
+      </div>
+
+      <div class="auth-field">
+        <label>نام کاربری</label>
+        <input type="text" id="authUsernameInput" placeholder="مثلاً: pouya" autocomplete="username" spellcheck="false">
+      </div>
+
+      <div class="auth-field">
+        <label>رمز عبور</label>
+        <input type="password" id="authPasswordInput" placeholder="حداقل ۴ کاراکتر" autocomplete="current-password">
+      </div>
+
+      <div class="auth-status" id="authStatus"></div>
+
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="btnCloseAuth">لغو</button>
+        <button class="btn btn-primary" id="btnAuthSubmit">ورود</button>
+      </div>
+
+      <div style="font-size:0.72rem;color:var(--text-dim);text-align:center;margin-top:14px;line-height:1.7;">
+        ⚠️ رمز عبور شما به‌صورت هش SHA-256 ذخیره می‌شود.<br>
+        هیچ ایمیلی لازم نیست.
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Settings Modal -->
@@ -1417,7 +1555,7 @@
 <!-- Offline DB Modal -->
 <div class="modal-overlay" id="offlineModal">
   <div class="modal">
-    <h3>📖 واژه‌نامه آفلاین</h3>
+    <h3>📖 واژه‌نامه</h3>
     <div class="offline-search">
       <input type="text" id="offlineSearchInput" placeholder="جستجو در واژه‌نامه..." autocomplete="off" spellcheck="false">
     </div>
@@ -1433,7 +1571,6 @@
 <div class="modal-overlay" id="masteredModal">
   <div class="modal">
     <h3>🏆 باکس تثبیت‌شده</h3>
-    <div class="mastered-header">کلماتی که به بالاترین سطح یادگیری رسیده‌اند</div>
     <div class="offline-search">
       <input type="text" id="masteredSearchInput" placeholder="جستجو در کلمات تثبیت‌شده..." autocomplete="off" spellcheck="false">
     </div>
@@ -1458,7 +1595,7 @@
    word و article اختیاری هستند و اگر ننویسید، خودکار استخراج می‌شوند.
    ═══════════════════════════════════════════════════════════ */
 const OFFLINE_DB = [
- 
+  
     {
       "german": "der ab",
       "word": "ab",
@@ -11602,15 +11739,23 @@ const OFFLINE_DB = [
       "nextReview": "2026-09-26",
       "createdAt": "2026-09-26"
     }
-
 ];
+
+/* ═══════════════════════════════════════════════════════════
+   ⚙️ تنظیمات JSONBin — اطلاعات حساب کاربری ابری
+   ═══════════════════════════════════════════════════════════ */
+const JSONBIN_CONFIG = {
+  MASTER_KEY: '$2a$10$aEa5lETFHCgtGf31FNvyheBCYVxLaFaIIIDpA4F1DsCE0hkYjmgZe',
+  BIN_ID: '', // بعد از اولین اجرا خودکار پر می‌شود
+  API_URL: 'https://api.jsonbin.io/v3'
+};
 
 /* ============================================================
    PWA Setup
    ============================================================ */
 const manifestData = {
   name: "لایتنر آلمانی", short_name: "لایتنر",
-  description: "لایتنر پنج‌باکسی برای یادگیری لغات آلمانی به فارسی",
+  description: "لایتنر برای یادگیری لغات آلمانی به فارسی",
   start_url: ".", scope: ".", display: "standalone", orientation: "portrait",
   background_color: "#0b0f1a", theme_color: "#0b0f1a", lang: "fa", dir: "rtl",
   icons: [{
@@ -11622,11 +11767,13 @@ const manifestURL = URL.createObjectURL(new Blob([JSON.stringify(manifestData)],
 const ml = document.createElement('link'); ml.rel = 'manifest'; ml.href = manifestURL; document.head.appendChild(ml);
 
 const swCode = `
-const CACHE_NAME = 'leitner-de-v10';
+const CACHE_NAME = 'leitner-de-v11';
 self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./']).catch(()=>{}))); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+  const url = new URL(e.request.url);
+  if (url.hostname.includes('jsonbin')) return;
   e.respondWith(caches.match(e.request).then(cached => {
     const fetchP = fetch(e.request).then(res => {
       if (res && res.status === 200 && res.type === 'basic') {
@@ -11647,60 +11794,14 @@ if ('serviceWorker' in navigator) {
 }
 
 /* ============================================================
-   ذخیره‌سازی چندلایه
+   ذخیره‌سازی محلی
    ============================================================ */
-const IDB_NAME = 'leitner_de_idb';
-const IDB_STORE = 'kv';
-let idbInstance = null;
-
-const openIDB = () => {
-  return new Promise((resolve) => {
-    if (idbInstance) return resolve(idbInstance);
-    try {
-      if (!('indexedDB' in window)) return resolve(null);
-      const req = indexedDB.open(IDB_NAME, 1);
-      req.onupgradeneeded = (e) => {
-        const db = e.target.result;
-        if (!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE);
-      };
-      req.onsuccess = (e) => { idbInstance = e.target.result; resolve(idbInstance); };
-      req.onerror = () => resolve(null);
-      req.onblocked = () => resolve(null);
-    } catch (e) { resolve(null); }
-  });
-};
-
-const idbSet = async (key, value) => {
-  const db = await openIDB();
-  if (!db) return false;
-  return new Promise((resolve) => {
-    try {
-      const tx = db.transaction(IDB_STORE, 'readwrite');
-      tx.objectStore(IDB_STORE).put(value, key);
-      tx.oncomplete = () => resolve(true);
-      tx.onerror = () => resolve(false);
-      tx.onabort = () => resolve(false);
-    } catch (e) { resolve(false); }
-  });
-};
-
-const idbGet = async (key) => {
-  const db = await openIDB();
-  if (!db) return null;
-  return new Promise((resolve) => {
-    try {
-      const tx = db.transaction(IDB_STORE, 'readonly');
-      const req = tx.objectStore(IDB_STORE).get(key);
-      req.onsuccess = () => resolve(req.result || null);
-      req.onerror = () => resolve(null);
-    } catch (e) { resolve(null); }
-  });
-};
-
 const STORAGE = {
-  cards: 'leitner_de_v18',
-  settings: 'leitner_de_settings_v18',
-  stats: 'leitner_de_stats_v18'
+  cards: 'leitner_de_v19',
+  settings: 'leitner_de_settings_v19',
+  stats: 'leitner_de_stats_v19',
+  session: 'leitner_de_session_v19',
+  binId: 'leitner_de_binid_v19'
 };
 
 let saveInProgress = false;
@@ -11708,24 +11809,11 @@ const save = async () => {
   if (saveInProgress) return;
   saveInProgress = true;
   try {
-    const payload = {
-      cards: JSON.stringify(cards),
-      settings: JSON.stringify(settings),
-      stats: JSON.stringify(stats),
-      savedAt: Date.now(),
-      version: 18
-    };
     try {
-      localStorage.setItem(STORAGE.cards, payload.cards);
-      localStorage.setItem(STORAGE.settings, payload.settings);
-      localStorage.setItem(STORAGE.stats, payload.stats);
+      localStorage.setItem(STORAGE.cards, JSON.stringify(cards));
+      localStorage.setItem(STORAGE.settings, JSON.stringify(settings));
+      localStorage.setItem(STORAGE.stats, JSON.stringify(stats));
     } catch (e) {}
-    try {
-      sessionStorage.setItem(STORAGE.cards, payload.cards);
-      sessionStorage.setItem(STORAGE.settings, payload.settings);
-      sessionStorage.setItem(STORAGE.stats, payload.stats);
-    } catch (e) {}
-    try { await idbSet('all', payload); } catch (e) {}
   } finally { saveInProgress = false; }
 };
 
@@ -11735,20 +11823,12 @@ const saveSync = () => {
     localStorage.setItem(STORAGE.settings, JSON.stringify(settings));
     localStorage.setItem(STORAGE.stats, JSON.stringify(stats));
   } catch (e) {}
-  idbSet('all', {
-    cards: JSON.stringify(cards),
-    settings: JSON.stringify(settings),
-    stats: JSON.stringify(stats),
-    savedAt: Date.now(),
-    version: 18
-  }).catch(() => {});
 };
 
 const load = async () => {
-  let loaded = false;
   try {
     const c = localStorage.getItem(STORAGE.cards);
-    if (c) { cards = JSON.parse(c); loaded = true; }
+    if (c) cards = JSON.parse(c);
     const s = localStorage.getItem(STORAGE.settings);
     if (s) {
       const p = JSON.parse(s);
@@ -11758,36 +11838,8 @@ const load = async () => {
     if (st) stats = { ...stats, ...JSON.parse(st) };
   } catch (e) {}
 
-  if (!loaded) {
-    try {
-      const idbData = await idbGet('all');
-      if (idbData && idbData.cards) {
-        cards = JSON.parse(idbData.cards);
-        if (idbData.settings) {
-          const p = JSON.parse(idbData.settings);
-          settings = { ...DEFAULT_SETTINGS, ...p, intervals: { ...DEFAULT_SETTINGS.intervals, ...(p.intervals || {}) } };
-        }
-        if (idbData.stats) stats = { ...stats, ...JSON.parse(idbData.stats) };
-        loaded = true;
-      }
-    } catch (e) {}
-  }
-
-  if (!loaded) {
-    try {
-      const c = sessionStorage.getItem(STORAGE.cards);
-      if (c) {
-        cards = JSON.parse(c);
-        const s = sessionStorage.getItem(STORAGE.settings);
-        const st = sessionStorage.getItem(STORAGE.stats);
-        if (s) {
-          const p = JSON.parse(s);
-          settings = { ...DEFAULT_SETTINGS, ...p, intervals: { ...DEFAULT_SETTINGS.intervals, ...(p.intervals || {}) } };
-        }
-        if (st) stats = { ...stats, ...JSON.parse(st) };
-      }
-    } catch (e) {}
-  }
+  const savedBinId = localStorage.getItem(STORAGE.binId);
+  if (savedBinId) JSONBIN_CONFIG.BIN_ID = savedBinId;
 
   if (!Array.isArray(cards)) cards = [];
   cards.forEach(c => {
@@ -11804,10 +11856,6 @@ const load = async () => {
    ============================================================ */
 let deferredPrompt = null;
 const installBtn = document.getElementById('btnInstall');
-const installToast = document.getElementById('installToast');
-const toastText = document.getElementById('toastText');
-const toastAction = document.getElementById('toastAction');
-const toastClose = document.getElementById('toastClose');
 
 const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
@@ -11816,47 +11864,26 @@ window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
   if (installBtn) installBtn.classList.remove('hidden');
-  showInstallToast('برنامه را نصب کنید و آفلاین استفاده کنید', 'نصب');
 });
 
 window.addEventListener('appinstalled', () => {
   deferredPrompt = null;
   if (installBtn) installBtn.classList.add('hidden');
-  hideInstallToast();
   showToastMessage('برنامه با موفقیت نصب شد');
 });
 
-if (installBtn) installBtn.addEventListener('click', triggerInstall);
-if (toastAction) toastAction.addEventListener('click', triggerInstall);
-if (toastClose) toastClose.addEventListener('click', () => {
-  hideInstallToast();
-  localStorage.setItem('install_dismissed', Date.now().toString());
-});
-
-async function triggerInstall() {
+if (installBtn) installBtn.addEventListener('click', async () => {
   if (deferredPrompt) {
     deferredPrompt.prompt();
     await deferredPrompt.userChoice;
     deferredPrompt = null;
-    if (installBtn) installBtn.classList.add('hidden');
-    hideInstallToast();
+    installBtn.classList.add('hidden');
   } else if (isIOS()) {
-    showToastMessage('در Safari روی Share بزنید و Add to Home Screen را انتخاب کنید', 6000);
+    showToastMessage('در Safari روی Share → Add to Home Screen بزنید', 6000);
   } else {
     showToastMessage('از منوی مرورگر Install app را انتخاب کنید', 6000);
   }
-}
-
-function showInstallToast(text, actionLabel) {
-  const d = localStorage.getItem('install_dismissed');
-  if (d) { const days = (Date.now() - parseInt(d)) / 86400000; if (days < 7) return; }
-  if (isStandalone()) return;
-  toastText.textContent = text;
-  toastAction.textContent = actionLabel || 'نصب';
-  installToast.classList.add('show');
-  setTimeout(() => hideInstallToast(), 15000);
-}
-function hideInstallToast() { installToast.classList.remove('show'); }
+});
 
 function showToastMessage(msg, duration = 3000) {
   const existing = document.getElementById('generic-toast');
@@ -11879,11 +11906,8 @@ function showToastMessage(msg, duration = 3000) {
   }, duration);
 }
 
-if (isIOS() && !isStandalone()) setTimeout(() => showInstallToast('برای نصب: Share → Add to Home Screen', 'راهنما'), 3000);
-setTimeout(() => { if (!deferredPrompt && !isStandalone() && !isIOS()) showInstallToast('این برنامه را نصب کنید', 'راهنما'); }, 5000);
-
 /* ============================================================
-   State & Utilities
+   State
    ============================================================ */
 const DEFAULT_SETTINGS = {
   intervals: { 1: 1, 2: 2, 3: 4, 4: 7, 5: 14 },
@@ -11911,6 +11935,9 @@ let isSpeaking = false;
 
 let offlineSearchQuery = '';
 let masteredSearchQuery = '';
+
+/* کاربر جاری */
+let currentUser = null; // { username, token, cardsCount, lastSync }
 
 const $ = (id) => document.getElementById(id);
 
@@ -11945,7 +11972,6 @@ const escapeHtml = (s) => String(s || '')
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
-/* مرتب‌سازی بر اساس کلمه بدون آرتیکل */
 const sortByWord = (arr) => {
   return [...arr].sort((a, b) => {
     const wa = (a.word || extractArticle(a.german).word || a.german || '').toLowerCase();
@@ -11955,7 +11981,182 @@ const sortByWord = (arr) => {
 };
 
 /* ============================================================
-   📚 راه‌اندازی دیتابیس آفلاین
+   🔐 هش کردن رمز عبور با SHA-256
+   ============================================================ */
+const hashPassword = async (password) => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hash));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+};
+
+/* ============================================================
+   ☁️ JSONBin Cloud Sync
+   ============================================================ */
+const syncHeaders = () => ({
+  'Content-Type': 'application/json',
+  'X-Master-Key': JSONBIN_CONFIG.MASTER_KEY,
+  'X-Bin-Meta': 'false'
+});
+
+/* ساخت BIN اگر وجود ندارد */
+const ensureBin = async () => {
+  if (JSONBIN_CONFIG.BIN_ID) return JSONBIN_CONFIG.BIN_ID;
+  const savedId = localStorage.getItem(STORAGE.binId);
+  if (savedId) {
+    JSONBIN_CONFIG.BIN_ID = savedId;
+    return savedId;
+  }
+
+  // ایجاد BIN جدید با ساختار خالی
+  try {
+    const res = await fetch(`${JSONBIN_CONFIG.API_URL}/b`, {
+      method: 'POST',
+      headers: {
+        ...syncHeaders(),
+        'X-Bin-Name': 'leitner-users',
+        'X-Bin-Private': 'true'
+      },
+      body: JSON.stringify({ users: {}, createdAt: Date.now() })
+    });
+    if (!res.ok) throw new Error('Create BIN failed: ' + res.status);
+    const data = await res.json();
+    const id = data.metadata?.id;
+    if (id) {
+      JSONBIN_CONFIG.BIN_ID = id;
+      localStorage.setItem(STORAGE.binId, id);
+      return id;
+    }
+    throw new Error('No BIN ID in response');
+  } catch (e) {
+    console.warn('ensureBin error:', e);
+    return null;
+  }
+};
+
+/* خواندن کل داده ابری */
+const fetchCloud = async () => {
+  const binId = await ensureBin();
+  if (!binId) return null;
+  try {
+    const res = await fetch(`${JSONBIN_CONFIG.API_URL}/b/${binId}/latest`, {
+      method: 'GET',
+      headers: syncHeaders()
+    });
+    if (!res.ok) throw new Error('Fetch failed: ' + res.status);
+    const data = await res.json();
+    return data.record || data;
+  } catch (e) {
+    console.warn('fetchCloud error:', e);
+    return null;
+  }
+};
+
+/* نوشتن کل داده ابری */
+const pushCloud = async (cloudData) => {
+  const binId = await ensureBin();
+  if (!binId) return false;
+  try {
+    const res = await fetch(`${JSONBIN_CONFIG.API_URL}/b/${binId}`, {
+      method: 'PUT',
+      headers: syncHeaders(),
+      body: JSON.stringify(cloudData)
+    });
+    return res.ok;
+  } catch (e) {
+    console.warn('pushCloud error:', e);
+    return false;
+  }
+};
+
+/* ============================================================
+   🔐 Auth Functions
+   ============================================================ */
+const register = async (username, password) => {
+  username = String(username || '').trim().toLowerCase();
+  if (!username || username.length < 3) throw new Error('نام کاربری حداقل ۳ کاراکتر');
+  if (!/^[a-z0-9_]+$/.test(username)) throw new Error('فقط حروف انگلیسی، اعداد و _');
+  if (!password || password.length < 4) throw new Error('رمز حداقل ۴ کاراکتر');
+
+  const passwordHash = await hashPassword(password);
+
+  const cloud = await fetchCloud();
+  if (!cloud) throw new Error('خطا در اتصال به سرور');
+
+  if (!cloud.users) cloud.users = {};
+  if (cloud.users[username]) throw new Error('این نام کاربری قبلاً گرفته شده');
+
+  cloud.users[username] = {
+    passwordHash,
+    cards: [],
+    stats: { reviews: {}, totalReviews: 0, totalCorrect: 0, totalWrong: 0, streak: 0, lastReview: null },
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  };
+
+  const ok = await pushCloud(cloud);
+  if (!ok) throw new Error('خطا در ذخیره‌سازی');
+
+  return { username };
+};
+
+const login = async (username, password) => {
+  username = String(username || '').trim().toLowerCase();
+  if (!username || !password) throw new Error('نام کاربری و رمز را وارد کنید');
+
+  const passwordHash = await hashPassword(password);
+
+  const cloud = await fetchCloud();
+  if (!cloud) throw new Error('خطا در اتصال به سرور');
+  if (!cloud.users || !cloud.users[username]) throw new Error('نام کاربری یافت نشد');
+
+  const user = cloud.users[username];
+  if (user.passwordHash !== passwordHash) throw new Error('رمز عبور اشتباه است');
+
+  return {
+    username,
+    cards: user.cards || [],
+    stats: user.stats || { reviews: {}, totalReviews: 0, totalCorrect: 0, totalWrong: 0, streak: 0, lastReview: null }
+  };
+};
+
+const saveUserData = async () => {
+  if (!currentUser) return;
+  try {
+    const cloud = await fetchCloud();
+    if (!cloud) return;
+    if (!cloud.users) cloud.users = {};
+    if (!cloud.users[currentUser.username]) return;
+    cloud.users[currentUser.username].cards = cards;
+    cloud.users[currentUser.username].stats = stats;
+    cloud.users[currentUser.username].updatedAt = Date.now();
+    await pushCloud(cloud);
+    currentUser.lastSync = Date.now();
+    localStorage.setItem(STORAGE.session, JSON.stringify({ username: currentUser.username }));
+  } catch (e) {
+    console.warn('saveUserData error:', e);
+  }
+};
+
+const loadUserData = (userData) => {
+  if (userData.cards && Array.isArray(userData.cards)) {
+    cards = userData.cards;
+    cards.forEach(c => {
+      if (c.box === undefined) c.box = 1;
+      if (!c.nextReview) c.nextReview = today();
+      if (!c.createdAt) c.createdAt = today();
+      if (!c.history) c.history = [];
+    });
+  }
+  if (userData.stats) {
+    stats = { ...stats, ...userData.stats };
+  }
+  saveSync();
+};
+
+/* ============================================================
+   📚 Offline DB
    ============================================================ */
 let offlineDB = [];
 
@@ -11973,7 +12174,6 @@ const initOfflineDB = () => {
       searchKey: german.toLowerCase().replace(/^(der|die|das)\s+/i, '').trim()
     };
   }).filter(Boolean);
-  console.log(`📚 دیتابیس آفلاین: ${offlineDB.length} کلمه`);
 };
 
 const searchOfflineDB = (query, maxResults = 8) => {
@@ -12093,6 +12293,7 @@ const addFromSuggest = (item) => {
   }
   showToastMessage(`«${item.word}» به باکس ۱ اضافه شد`);
   showStatus('موفق', 'success');
+  if (currentUser) saveUserData();
 };
 
 const hideSuggestBox = () => {
@@ -12111,61 +12312,7 @@ const highlightSuggest = (dir) => {
 };
 
 /* ============================================================
-   ترجمه آنلاین
-   ============================================================ */
-const translateGoogle = async (text, from, to) => {
-  try {
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 7000);
-    const res = await fetch(url, { signal: ctrl.signal });
-    clearTimeout(t);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if (Array.isArray(data) && Array.isArray(data[0])) {
-      const translated = data[0].map(part => part[0]).filter(Boolean).join('');
-      if (!translated || translated.toLowerCase() === text.toLowerCase()) return null;
-      return translated;
-    }
-    return null;
-  } catch (e) { return null; }
-};
-
-const translateMyMemory = async (text, from, to) => {
-  try {
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`;
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 7000);
-    const res = await fetch(url, { signal: ctrl.signal });
-    clearTimeout(t);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if (data?.responseData?.translatedText) {
-      let out = data.responseData.translatedText.trim().replace(/^["']|["']$/g, '');
-      if (!out || out.toLowerCase() === text.toLowerCase()) return null;
-      return out;
-    }
-    return null;
-  } catch (e) { return null; }
-};
-
-const fetchOnlineTranslation = async (word) => {
-  if (!settings.onlineTranslate) return null;
-  if (!word) return null;
-  let english = await translateGoogle(word, 'de', 'en');
-  if (!english) english = await translateMyMemory(word, 'de', 'en');
-  if (english) {
-    let persian = await translateGoogle(english, 'en', 'fa');
-    if (!persian) persian = await translateMyMemory(english, 'en', 'fa');
-    if (persian) return persian;
-  }
-  let direct = await translateGoogle(word, 'de', 'fa');
-  if (!direct) direct = await translateMyMemory(word, 'de', 'fa');
-  return direct;
-};
-
-/* ============================================================
-   Speech Synthesis
+   Speech
    ============================================================ */
 const speechSupported = 'speechSynthesis' in window;
 
@@ -12181,7 +12328,6 @@ const stopSpeaking = () => {
   if (!speechSupported) return;
   try { speechSynthesis.cancel(); } catch (e) {}
   isSpeaking = false;
-  currentUtterance = null;
   const btn = $('btnSpeak');
   if (btn) {
     btn.classList.remove('speaking');
@@ -12191,18 +12337,13 @@ const stopSpeaking = () => {
 };
 
 const speakWord = (word) => {
-  if (!speechSupported) {
-    showToastMessage('مرورگر شما از تلفظ پشتیبانی نمی‌کند', 2500);
-    return;
-  }
-  if (!word) return;
+  if (!speechSupported || !word) return;
   if (isSpeaking) { stopSpeaking(); return; }
   try {
     speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(word);
     utter.lang = 'de-DE';
     utter.rate = 0.9;
-    utter.pitch = 1;
     const voice = getGermanVoice();
     if (voice) utter.voice = voice;
     utter.onstart = () => {
@@ -12214,17 +12355,7 @@ const speakWord = (word) => {
         if (label) label.textContent = 'در حال تلفظ...';
       }
     };
-    utter.onend = () => {
-      isSpeaking = false;
-      currentUtterance = null;
-      const btn = $('btnSpeak');
-      if (btn) {
-        btn.classList.remove('speaking');
-        const label = btn.querySelector('span:not(.icon)');
-        if (label) label.textContent = 'تلفظ';
-      }
-    };
-    utter.onerror = () => {
+    utter.onend = utter.onerror = () => {
       isSpeaking = false;
       const btn = $('btnSpeak');
       if (btn) {
@@ -12233,19 +12364,15 @@ const speakWord = (word) => {
         if (label) label.textContent = 'تلفظ';
       }
     };
-    currentUtterance = utter;
     speechSynthesis.speak(utter);
-  } catch (e) { isSpeaking = false; }
+  } catch (e) {}
 };
 
 const speakCurrentCard = () => {
   if (!currentCardId) return;
   const card = cards.find(c => c.id === currentCardId);
-  if (!card) return;
-  speakWord(card.german || card.word);
+  if (card) speakWord(card.german || card.word);
 };
-
-if (speechSupported) speechSynthesis.onvoiceschanged = () => {};
 
 /* ============================================================
    Stats & Boxes
@@ -12270,15 +12397,12 @@ const getBoxCount = (box) => cards.filter(c => c.box === box).length;
 const renderBoxes = () => {
   const bar = $('boxesBar');
   bar.innerHTML = '';
-  for (let b = 1; b <= 6; b++) {
+  for (let b = 1; b <= 5; b++) {
     const total = getBoxCount(b);
     const chip = document.createElement('div');
     chip.className = 'box-chip' + (activeBox === b ? ' active' : '');
-    chip.dataset.box = b;
-    let label = `باکس ${b}`;
-    if (b === 6) label = '🏆 تثبیت';
     chip.innerHTML = `
-      <div class="chip-label">${label}</div>
+      <div class="chip-label">باکس ${b}</div>
       <div class="chip-count">${total}</div>
     `;
     chip.onclick = () => switchBox(b);
@@ -12304,9 +12428,8 @@ const switchBox = (box) => {
 
 const updateButtons = () => {
   const has = currentCardId !== null;
-  const isMastered = activeBox === 6;
   $('btnWrong').disabled = !has || !isFlipped;
-  $('btnHard').disabled = !has || !isFlipped || isMastered;
+  $('btnHard').disabled = !has || !isFlipped;
   $('btnGood').disabled = !has || !isFlipped;
 };
 
@@ -12429,20 +12552,12 @@ const markGood = () => {
   if (!card) return;
   const oldBox = card.box;
   let newBox;
-
-  // اگر در باکس ۵ بود → به باکس ۶ (تثبیت‌شده)
-  if (card.box === 5) {
-    newBox = 6;
-  } else if (card.box === 6) {
-    newBox = 6; // در تثبیت می‌ماند
-  } else {
-    newBox = Math.min(5, card.box + 1);
-  }
+  if (card.box === 5) newBox = 6;
+  else if (card.box === 6) newBox = 6;
+  else newBox = Math.min(5, card.box + 1);
 
   card.box = newBox;
-  if (newBox < 6) {
-    card.nextReview = addDays(today(), settings.intervals[newBox]);
-  }
+  if (newBox < 6) card.nextReview = addDays(today(), settings.intervals[newBox]);
   card.history.push({ date: today(), result: 'good', from: oldBox, to: newBox });
   if (card.history.length > 100) card.history = card.history.slice(-100);
   recordReview(true, false);
@@ -12453,6 +12568,7 @@ const markGood = () => {
   if (idx !== -1) sessionQueue.splice(idx, 1);
   if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
   afterAnswer();
+  if (currentUser) saveUserData();
 };
 
 const markWrong = () => {
@@ -12471,6 +12587,7 @@ const markWrong = () => {
   if (idx !== -1) sessionQueue.splice(idx, 1);
   if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
   afterAnswer();
+  if (currentUser) saveUserData();
 };
 
 const markHard = () => {
@@ -12483,6 +12600,7 @@ const markHard = () => {
   if (idx !== -1) { sessionQueue.splice(idx, 1); sessionQueue.push(card.id); }
   if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
   afterAnswer();
+  if (currentUser) saveUserData();
 };
 
 let statusTimer = null;
@@ -12498,7 +12616,7 @@ const showStatus = (msg, type = 'success') => {
 /* ============================================================
    افزودن کارت
    ============================================================ */
-const addCard = async () => {
+const addCard = () => {
   const input = $('inputGerman');
   const raw = input.value.trim();
   if (!raw) { showStatus('کلمه را وارد کنید', 'danger'); return; }
@@ -12516,10 +12634,6 @@ const addCard = async () => {
     persian = dbMatch.persian;
     article = dbMatch.article || article;
     word = dbMatch.word || word;
-  } else if (settings.onlineTranslate) {
-    showStatus('در حال ترجمه آنلاین...', 'warning');
-    const tr = await fetchOnlineTranslation(word || raw);
-    if (tr) persian = tr;
   }
 
   const card = {
@@ -12546,6 +12660,7 @@ const addCard = async () => {
     buildSessionQueue();
     showNextCard(0);
   }
+  if (currentUser) saveUserData();
 };
 
 /* ============================================================
@@ -12593,7 +12708,6 @@ const renderWordList = () => {
     return;
   }
 
-  // مرتب‌سازی بر اساس کلمه بدون آرتیکل
   boxCards = sortByWord(boxCards);
 
   list.innerHTML = '';
@@ -12656,6 +12770,7 @@ const saveEdit = () => {
   $('editModal').classList.remove('show');
   renderWordList();
   if (currentCardId === card.id) renderCardSync(card);
+  if (currentUser) saveUserData();
 };
 
 const deleteCard = (cardId) => {
@@ -12673,18 +12788,12 @@ const deleteCard = (cardId) => {
     showNextCard(0);
   }
   showToastMessage('حذف شد');
+  if (currentUser) saveUserData();
 };
 
-/* ============================================================
-   بازنشانی همه
-   ============================================================ */
 const resetAll = () => {
-  if (!confirm('⚠️ آیا مطمئن هستید که می‌خواهید همه کلمات را حذف کنید؟ این عمل قابل بازگشت نیست.')) {
-    return;
-  }
-  if (!confirm('🚨 تأیید نهایی: تمام کارت‌ها از همه باکس‌ها پاک خواهند شد. مطمئنید؟')) {
-    return;
-  }
+  if (!confirm('⚠️ مطمئنید که می‌خواهید همه کلمات را حذف کنید؟')) return;
+  if (!confirm('🚨 تأیید نهایی: تمام کارت‌ها پاک خواهند شد.')) return;
   cards = [];
   stats = { reviews: {}, totalReviews: 0, totalCorrect: 0, totalWrong: 0, streak: 0, lastReview: null };
   save();
@@ -12697,10 +12806,11 @@ const resetAll = () => {
   showNextCard(0);
   showToastMessage('همه کلمات حذف شدند', 3500);
   $('settingsModal').classList.remove('show');
+  if (currentUser) saveUserData();
 };
 
 /* ============================================================
-   📖 Offline DB Modal
+   Offline Modal
    ============================================================ */
 let offlineRevealed = new Set();
 
@@ -12717,9 +12827,7 @@ const renderOfflineList = () => {
   const list = $('offlineList');
   const stats = $('offlineStats');
 
-  // مرتب‌سازی بر اساس کلمه بدون آرتیکل
   const sorted = sortByWord(offlineDB);
-
   const q = offlineSearchQuery.trim().toLowerCase();
   const filtered = q ? sorted.filter(item =>
     item.german.toLowerCase().includes(q) ||
@@ -12754,14 +12862,14 @@ const renderOfflineList = () => {
         <div class="o-german">
           ${hasArticle ? `
             <span class="o-article-hidden ${artClass} ${artRevealed ? 'revealed' : ''}"
-                  data-key="${escapeHtml(key)}_art" title="کلیک برای نمایش آرتیکل">
+                  data-key="${escapeHtml(key)}_art">
               ${artRevealed ? escapeHtml(item.article) : '?'}
             </span>
           ` : ''}
           <span>${escapeHtml(item.word)}</span>
         </div>
         <div class="o-persian-hidden ${meanRevealed ? 'revealed' : ''}"
-             data-key="${escapeHtml(key)}_mean" title="کلیک برای نمایش معنی">
+             data-key="${escapeHtml(key)}_mean">
           ${meanRevealed ? escapeHtml(item.persian || '—') : '•••••'}
         </div>
       </div>
@@ -12836,10 +12944,11 @@ const addFromOffline = (item) => {
   }
   showToastMessage(`«${item.word}» به باکس ۱ اضافه شد`);
   renderOfflineList();
+  if (currentUser) saveUserData();
 };
 
 /* ============================================================
-   🏆 Mastered Box Modal
+   Mastered Modal
    ============================================================ */
 let masteredRevealed = new Set();
 
@@ -12856,7 +12965,6 @@ const renderMasteredList = () => {
   const list = $('masteredList');
   const stats = $('masteredStats');
 
-  // کلمات باکس ۶، مرتب‌شده بدون آرتیکل
   let masteredCards = cards.filter(c => c.box === 6);
   masteredCards = sortByWord(masteredCards);
 
@@ -12891,19 +12999,20 @@ const renderMasteredList = () => {
         <div class="o-german">
           ${hasArticle ? `
             <span class="o-article-hidden ${artClass} ${artRevealed ? 'revealed' : ''}"
-                  data-key="${escapeHtml(key)}_art" title="کلیک برای نمایش آرتیکل">
+                  data-key="${escapeHtml(key)}_art">
               ${artRevealed ? escapeHtml(card.article) : '?'}
             </span>
           ` : ''}
           <span>${escapeHtml(card.word || card.german)}</span>
         </div>
         <div class="o-persian-hidden ${meanRevealed ? 'revealed' : ''}"
-             data-key="${escapeHtml(key)}_mean" title="کلیک برای نمایش معنی">
+             data-key="${escapeHtml(key)}_mean">
           ${meanRevealed ? escapeHtml(card.persian || '—') : '•••••'}
         </div>
       </div>
       <div class="o-actions">
         <button class="o-speak" title="تلفظ">🔊</button>
+        <button class="o-back" title="برگرداندن به باکس ۱">⬅️ برگرداندن</button>
       </div>
     `;
 
@@ -12934,14 +13043,32 @@ const renderMasteredList = () => {
       speakWord(card.german || card.word);
     };
 
+    el.querySelector('.o-back').onclick = (e) => {
+      e.stopPropagation();
+      returnToBox1(card);
+    };
+
     list.appendChild(el);
   });
 };
 
-/* ==================== بارگیری ==================== */
+const returnToBox1 = (card) => {
+  card.box = 1;
+  card.nextReview = today();
+  card.history.push({ date: today(), result: 'return', from: 6, to: 1 });
+  save();
+  renderBoxes();
+  renderMasteredList();
+  showToastMessage(`«${card.word || card.german}» به باکس ۱ برگشت`);
+  if (currentUser) saveUserData();
+};
+
+/* ============================================================
+   Export / Import
+   ============================================================ */
 const exportCards = () => {
   const data = {
-    version: 18,
+    version: 19,
     exportedAt: new Date().toISOString(),
     cards: cards.map(c => ({
       german: c.german,
@@ -12967,7 +13094,6 @@ const exportCards = () => {
   showToastMessage('فایل پشتیبان بارگیری شد');
 };
 
-/* ==================== بارگذاری ==================== */
 const handleFileSelect = (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -12977,11 +13103,6 @@ const handleFileSelect = (e) => {
       const data = JSON.parse(event.target.result);
       if (!data.cards || !Array.isArray(data.cards)) {
         showToastMessage('فایل نامعتبر است', 2500);
-        $('filePicker').classList.remove('has-file');
-        $('fileName').style.display = 'none';
-        $('importInfo').style.display = 'none';
-        $('btnImportDo').disabled = true;
-        pendingImportData = null;
         return;
       }
       pendingImportData = data;
@@ -12994,11 +13115,6 @@ const handleFileSelect = (e) => {
       $('btnImportDo').disabled = false;
     } catch (err) {
       showToastMessage('خطا در خواندن فایل', 2500);
-      $('filePicker').classList.remove('has-file');
-      $('fileName').style.display = 'none';
-      $('importInfo').style.display = 'none';
-      $('btnImportDo').disabled = true;
-      pendingImportData = null;
     }
   };
   reader.readAsText(file);
@@ -13038,9 +13154,12 @@ const doImport = () => {
   $('btnImportDo').disabled = true;
   pendingImportData = null;
   showToastMessage(`${added} واژه اضافه شد${skipped ? ` — ${skipped} تکراری` : ''}`, 3500);
+  if (currentUser) saveUserData();
 };
 
-/* ==================== Theme ==================== */
+/* ============================================================
+   Theme
+   ============================================================ */
 const applyTheme = () => {
   document.documentElement.setAttribute('data-theme', settings.theme);
   $('btnTheme').textContent = settings.theme === 'dark' ? '🌙' : '☀️';
@@ -13054,7 +13173,149 @@ const toggleTheme = () => {
   save();
 };
 
-/* ==================== Events ==================== */
+/* ============================================================
+   🎨 Auth UI
+   ============================================================ */
+let authTab = 'login';
+
+const openAuthModal = () => {
+  if (currentUser) {
+    // نمایش اطلاعات کاربر
+    $('authLoggedIn').style.display = 'block';
+    $('authNotLoggedIn').style.display = 'none';
+    $('authTitle').textContent = '👤 حساب کاربری';
+    $('authAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
+    $('authUsername').textContent = '@' + currentUser.username;
+    $('authSyncStatus').textContent = '☁️ متصل به سرور — ' + cards.length + ' کلمه';
+    $('authSyncStatus').className = 'auth-status success';
+  } else {
+    $('authLoggedIn').style.display = 'none';
+    $('authNotLoggedIn').style.display = 'block';
+    $('authTitle').textContent = '👤 ورود / ثبت‌نام';
+    $('authUsernameInput').value = '';
+    $('authPasswordInput').value = '';
+    $('authStatus').textContent = '';
+    $('authStatus').className = 'auth-status';
+    switchAuthTab('login');
+  }
+  $('authModal').classList.add('show');
+};
+
+const switchAuthTab = (tab) => {
+  authTab = tab;
+  document.querySelectorAll('.auth-tab').forEach(el => {
+    el.classList.toggle('active', el.dataset.tab === tab);
+  });
+  $('btnAuthSubmit').textContent = tab === 'login' ? 'ورود' : 'ثبت‌نام';
+  $('authStatus').textContent = '';
+  $('authStatus').className = 'auth-status';
+};
+
+const submitAuth = async () => {
+  const username = $('authUsernameInput').value.trim();
+  const password = $('authPasswordInput').value;
+
+  $('authStatus').textContent = '⏳ در حال اتصال...';
+  $('authStatus').className = 'auth-status';
+
+  try {
+    if (authTab === 'register') {
+      await register(username, password);
+      $('authStatus').textContent = '✅ ثبت‌نام موفق! حالا وارد شوید';
+      $('authStatus').className = 'auth-status success';
+      switchAuthTab('login');
+      $('authUsernameInput').value = username;
+      $('authPasswordInput').value = '';
+    } else {
+      const userData = await login(username, password);
+      currentUser = { username: userData.username, lastSync: Date.now() };
+      localStorage.setItem(STORAGE.session, JSON.stringify({ username: currentUser.username }));
+      loadUserData(userData);
+      renderBoxes();
+      buildSessionQueue();
+      showNextCard(0);
+      renderWordList();
+      $('authStatus').textContent = '✅ خوش آمدید!';
+      $('authStatus').className = 'auth-status success';
+      setTimeout(() => {
+        $('authModal').classList.remove('show');
+        updateUserButton();
+        showToastMessage(`خوش آمدی @${currentUser.username}`);
+      }, 600);
+    }
+  } catch (e) {
+    $('authStatus').textContent = '❌ ' + (e.message || 'خطا');
+    $('authStatus').className = 'auth-status error';
+  }
+};
+
+const logout = () => {
+  if (!confirm('از حساب خود خارج می‌شوید؟')) return;
+  currentUser = null;
+  localStorage.removeItem(STORAGE.session);
+  updateUserButton();
+  $('authModal').classList.remove('show');
+  showToastMessage('خارج شدید');
+};
+
+const forceSync = async () => {
+  if (!currentUser) return;
+  $('authSyncStatus').textContent = '⏳ در حال همگام‌سازی...';
+  $('authSyncStatus').className = 'auth-status';
+  await saveUserData();
+  const cloud = await fetchCloud();
+  if (cloud && cloud.users && cloud.users[currentUser.username]) {
+    const userData = cloud.users[currentUser.username];
+    loadUserData({ cards: userData.cards, stats: userData.stats });
+    renderBoxes();
+    buildSessionQueue();
+    showNextCard(0);
+    renderWordList();
+    $('authSyncStatus').textContent = '✅ همگام‌سازی شد — ' + cards.length + ' کلمه';
+    $('authSyncStatus').className = 'auth-status success';
+  } else {
+    $('authSyncStatus').textContent = '⚠️ خطا در همگام‌سازی';
+    $('authSyncStatus').className = 'auth-status error';
+  }
+};
+
+const updateUserButton = () => {
+  if (currentUser) {
+    $('btnUser').classList.add('user-logged-in');
+    $('btnUser').textContent = '👤';
+    $('btnUser').title = '@' + currentUser.username;
+  } else {
+    $('btnUser').classList.remove('user-logged-in');
+    $('btnUser').textContent = '👤';
+    $('btnUser').title = 'ورود / ثبت‌نام';
+  }
+};
+
+const restoreSession = async () => {
+  const sessionStr = localStorage.getItem(STORAGE.session);
+  if (!sessionStr) return;
+  try {
+    const session = JSON.parse(sessionStr);
+    if (session.username) {
+      const cloud = await fetchCloud();
+      if (cloud && cloud.users && cloud.users[session.username]) {
+        currentUser = { username: session.username, lastSync: Date.now() };
+        loadUserData({
+          cards: cloud.users[session.username].cards,
+          stats: cloud.users[session.username].stats
+        });
+        updateUserButton();
+        renderBoxes();
+        buildSessionQueue();
+        showNextCard(0);
+      }
+    }
+  } catch (e) {}
+};
+
+/* ============================================================
+   Events
+   ============================================================ */
 const bind = () => {
   $('card').onclick = (e) => {
     if (e.target.closest('button')) return;
@@ -13068,13 +13329,13 @@ const bind = () => {
   $('btnTheme').onclick = toggleTheme;
   $('btnOffline').onclick = openOfflineModal;
   $('btnMastered').onclick = openMasteredModal;
+  $('btnUser').onclick = openAuthModal;
 
   $('btnSpeak').onclick = (e) => {
     e.stopPropagation();
     speakCurrentCard();
   };
 
-  /* Suggest Box Events */
   const inputEl = $('inputGerman');
 
   inputEl.addEventListener('input', (e) => {
@@ -13135,7 +13396,6 @@ const bind = () => {
   };
 
   $('btnResetAll').onclick = resetAll;
-
   $('btnExport').onclick = exportCards;
   $('btnImportToggle').onclick = () => $('importArea').classList.toggle('show');
   $('fileInput').onchange = handleFileSelect;
@@ -13149,6 +13409,24 @@ const bind = () => {
     $('btnImportDo').disabled = true;
     pendingImportData = null;
   };
+
+  /* Auth Modal */
+  document.querySelectorAll('.auth-tab').forEach(tab => {
+    tab.onclick = () => switchAuthTab(tab.dataset.tab);
+  });
+  $('btnAuthSubmit').onclick = submitAuth;
+  $('btnCloseAuth').onclick = () => $('authModal').classList.remove('show');
+  $('authModal').onclick = (e) => { if (e.target === $('authModal')) $('authModal').classList.remove('show'); };
+  $('btnLogout').onclick = logout;
+  $('btnForceSync').onclick = forceSync;
+  $('btnCloseAuthLoggedIn').onclick = () => $('authModal').classList.remove('show');
+
+  $('authPasswordInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') submitAuth();
+  });
+  $('authUsernameInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') $('authPasswordInput').focus();
+  });
 
   /* Offline Modal */
   $('btnCloseOffline').onclick = () => $('offlineModal').classList.remove('show');
@@ -13183,15 +13461,14 @@ const bind = () => {
     } else if (e.key === 'ArrowLeft' || e.key === '2') {
       if (isFlipped) markWrong();
     } else if (e.key === 'ArrowDown' || e.key === '3') {
-      if (isFlipped && activeBox !== 6) markHard();
+      if (isFlipped) markHard();
     } else if (e.key === 'p' || e.key === 'P') {
       if (currentCardId) speakCurrentCard();
     } else if (e.key === 'Escape') {
       stopSpeaking();
-      $('settingsModal').classList.remove('show');
-      $('editModal').classList.remove('show');
-      $('offlineModal').classList.remove('show');
-      $('masteredModal').classList.remove('show');
+      ['settingsModal', 'editModal', 'offlineModal', 'masteredModal', 'authModal'].forEach(id => {
+        $(id)?.classList.remove('show');
+      });
     }
   });
 
@@ -13200,12 +13477,13 @@ const bind = () => {
     if (document.visibilityState === 'hidden') saveSync();
   });
   window.addEventListener('pagehide', () => saveSync());
-  document.addEventListener('freeze', () => saveSync());
-  window.addEventListener('blur', () => saveSync());
   setInterval(save, 15000);
+  setInterval(() => { if (currentUser) saveUserData(); }, 60000);
 };
 
-/* ==================== Init ==================== */
+/* ============================================================
+   Init
+   ============================================================ */
 const init = async () => {
   initOfflineDB();
   await load();
@@ -13217,6 +13495,10 @@ const init = async () => {
   if (isStandalone() && installBtn) installBtn.classList.add('hidden');
   if (speechSupported) speechSynthesis.getVoices();
   saveSync();
+
+  // بازیابی جلسه کاربر
+  await restoreSession();
+  updateUserButton();
 };
 
 init();

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>لایتنر آلمانی</title>
 
-<meta name="description" content="لایتنر شش‌باکسی برای یادگیری لغات آلمانی به فارسی">
+<meta name="description" content="لایتنر پنج‌باکسی برای یادگیری لغات آلمانی به فارسی">
 <meta name="theme-color" content="#0b0f1a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -178,12 +178,6 @@
     transform: translateY(-2px);
   }
 
-  .icon-btn.user-logged-in {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
-    border: none;
-  }
-
   #btnInstall {
     background: linear-gradient(135deg, #10b981, #059669);
     color: white;
@@ -210,13 +204,6 @@
     color: white;
     border: none;
     box-shadow: 0 6px 20px var(--warning-glow);
-  }
-
-  #btnUser {
-    background: linear-gradient(135deg, #6366f1, #4f46e5);
-    color: white;
-    border: none;
-    box-shadow: 0 6px 20px var(--accent-glow);
   }
 
   .boxes-bar {
@@ -951,11 +938,40 @@
     padding: 10px 12px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     transition: all var(--transition);
   }
 
   .offline-item:hover { border-color: var(--border-strong); }
+
+  .offline-item.pinned {
+    border-color: var(--warning);
+    background: linear-gradient(135deg, var(--surface-2), rgba(245, 158, 11, 0.08));
+    box-shadow: 0 0 0 2px var(--warning-glow);
+  }
+
+  .offline-item .o-pin-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+    flex-shrink: 0;
+    background: var(--surface-3);
+    color: var(--text-dim);
+  }
+
+  .offline-item .o-pin-btn:hover { background: var(--border-strong); color: var(--text); }
+  .offline-item .o-pin-btn.pinned {
+    background: var(--warning);
+    color: white;
+  }
+
   .offline-item .o-info { flex: 1; min-width: 0; }
 
   .offline-item .o-german {
@@ -1029,32 +1045,25 @@
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 800;
-    padding: 7px 12px;
+    padding: 6px 10px;
     transition: all var(--transition);
     color: white;
     display: flex;
     align-items: center;
     gap: 4px;
     white-space: nowrap;
+    min-width: 32px;
+    height: 32px;
+    justify-content: center;
   }
 
-  .o-speak {
-    background: var(--warning) !important;
-    color: #000 !important;
-    width: 32px;
-    height: 32px;
-    padding: 0 !important;
-    justify-content: center;
-    font-size: 0.85rem !important;
-  }
+  .o-speak { background: var(--warning) !important; color: #000 !important; }
   .o-speak:hover { background: #d97706 !important; }
 
   .o-add {
     background: var(--success);
-    min-width: 80px;
-    justify-content: center;
   }
   .o-add:hover { background: #059669; }
   .o-add.added {
@@ -1063,10 +1072,13 @@
     cursor: not-allowed;
   }
 
+  .o-del {
+    background: var(--danger);
+  }
+  .o-del:hover { background: #be123c; }
+
   .o-back {
     background: var(--accent);
-    min-width: 80px;
-    justify-content: center;
   }
   .o-back:hover { background: #4f46e5; }
 
@@ -1202,119 +1214,6 @@
     box-shadow: 0 10px 28px var(--danger-glow);
   }
 
-  /* Auth Modal */
-  .auth-tabs {
-    display: flex;
-    gap: 4px;
-    background: var(--surface-2);
-    padding: 4px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-  }
-
-  .auth-tab {
-    flex: 1;
-    background: transparent;
-    color: var(--text-muted);
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 0.9rem;
-    transition: all var(--transition);
-    font-family: inherit;
-  }
-
-  .auth-tab:hover { color: var(--text); }
-  .auth-tab.active { background: var(--accent); color: white; }
-
-  .auth-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-
-  .auth-field label {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-weight: 700;
-  }
-
-  .auth-field input {
-    background: var(--surface-2);
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    color: var(--text);
-    font-size: 0.95rem;
-    outline: none;
-    font-family: inherit;
-    transition: all var(--transition);
-    direction: ltr;
-    text-align: left;
-  }
-
-  .auth-field input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-glow);
-  }
-
-  .auth-user-info {
-    background: var(--surface-2);
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-    margin-bottom: 16px;
-  }
-
-  .auth-user-info .avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: white;
-    margin: 0 auto 10px;
-    text-transform: uppercase;
-  }
-
-  .auth-user-info .username {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--text);
-    direction: ltr;
-  }
-
-  .auth-user-info .hint {
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    margin-top: 4px;
-  }
-
-  .auth-status {
-    background: var(--surface-2);
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    text-align: center;
-    margin-bottom: 12px;
-    min-height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-
-  .auth-status.error { color: var(--danger); background: rgba(244, 63, 94, 0.1); }
-  .auth-status.success { color: var(--success); background: rgba(16, 185, 129, 0.1); }
-
   @media (max-width: 640px) {
     body { padding: 14px; padding-top: max(14px, env(safe-area-inset-top)); padding-bottom: max(14px, env(safe-area-inset-bottom)); }
     .app { gap: 14px; }
@@ -1360,7 +1259,6 @@
       <button class="icon-btn" id="btnMastered" title="باکس تثبیت‌شده">🏆</button>
       <button class="icon-btn" id="btnOffline" title="واژه‌نامه">📖</button>
       <button class="icon-btn" id="btnTheme" title="تغییر تم">🌙</button>
-      <button class="icon-btn" id="btnUser" title="ورود / ثبت‌نام">👤</button>
       <button class="icon-btn" id="btnSettings" title="تنظیمات">⚙️</button>
     </div>
   </header>
@@ -1425,58 +1323,6 @@
   <span class="toast-text" id="toastText">این برنامه را نصب کنید</span>
   <button class="toast-action" id="toastAction">نصب</button>
   <button class="toast-close" id="toastClose">✕</button>
-</div>
-
-<!-- Auth Modal -->
-<div class="modal-overlay" id="authModal">
-  <div class="modal">
-    <h3 id="authTitle">👤 ورود / ثبت‌نام</h3>
-
-    <!-- حالت وارد شده -->
-    <div id="authLoggedIn" style="display:none;">
-      <div class="auth-user-info">
-        <div class="avatar" id="authAvatar">U</div>
-        <div class="username" id="authUsername">username</div>
-        <div class="hint">شما وارد شده‌اید</div>
-      </div>
-      <div class="auth-status" id="authSyncStatus">☁️ در حال همگام‌سازی...</div>
-      <div class="modal-actions" style="justify-content:space-between;">
-        <button class="btn btn-danger" id="btnLogout">🚪 خروج</button>
-        <button class="btn btn-primary" id="btnForceSync">🔄 همگام‌سازی</button>
-      </div>
-      <button class="btn btn-ghost" id="btnCloseAuthLoggedIn" style="width:100%;margin-top:10px;">بستن</button>
-    </div>
-
-    <!-- حالت وارد نشده -->
-    <div id="authNotLoggedIn">
-      <div class="auth-tabs">
-        <button class="auth-tab active" data-tab="login">ورود</button>
-        <button class="auth-tab" data-tab="register">ثبت‌نام</button>
-      </div>
-
-      <div class="auth-field">
-        <label>نام کاربری</label>
-        <input type="text" id="authUsernameInput" placeholder="مثلاً: pouya" autocomplete="username" spellcheck="false">
-      </div>
-
-      <div class="auth-field">
-        <label>رمز عبور</label>
-        <input type="password" id="authPasswordInput" placeholder="حداقل ۴ کاراکتر" autocomplete="current-password">
-      </div>
-
-      <div class="auth-status" id="authStatus"></div>
-
-      <div class="modal-actions">
-        <button class="btn btn-ghost" id="btnCloseAuth">لغو</button>
-        <button class="btn btn-primary" id="btnAuthSubmit">ورود</button>
-      </div>
-
-      <div style="font-size:0.72rem;color:var(--text-dim);text-align:center;margin-top:14px;line-height:1.7;">
-        ⚠️ رمز عبور شما به‌صورت هش SHA-256 ذخیره می‌شود.<br>
-        هیچ ایمیلی لازم نیست.
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Settings Modal -->
@@ -1595,7 +1441,7 @@
    word و article اختیاری هستند و اگر ننویسید، خودکار استخراج می‌شوند.
    ═══════════════════════════════════════════════════════════ */
 const OFFLINE_DB = [
-  
+ 
     {
       "german": "der ab",
       "word": "ab",
@@ -11741,15 +11587,6 @@ const OFFLINE_DB = [
     }
 ];
 
-/* ═══════════════════════════════════════════════════════════
-   ⚙️ تنظیمات JSONBin — اطلاعات حساب کاربری ابری
-   ═══════════════════════════════════════════════════════════ */
-const JSONBIN_CONFIG = {
-  MASTER_KEY: '$2a$10$aEa5lETFHCgtGf31FNvyheBCYVxLaFaIIIDpA4F1DsCE0hkYjmgZe',
-  BIN_ID: '', // بعد از اولین اجرا خودکار پر می‌شود
-  API_URL: 'https://api.jsonbin.io/v3'
-};
-
 /* ============================================================
    PWA Setup
    ============================================================ */
@@ -11767,13 +11604,11 @@ const manifestURL = URL.createObjectURL(new Blob([JSON.stringify(manifestData)],
 const ml = document.createElement('link'); ml.rel = 'manifest'; ml.href = manifestURL; document.head.appendChild(ml);
 
 const swCode = `
-const CACHE_NAME = 'leitner-de-v11';
+const CACHE_NAME = 'leitner-de-v12';
 self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./']).catch(()=>{}))); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
-  const url = new URL(e.request.url);
-  if (url.hostname.includes('jsonbin')) return;
   e.respondWith(caches.match(e.request).then(cached => {
     const fetchP = fetch(e.request).then(res => {
       if (res && res.status === 200 && res.type === 'basic') {
@@ -11797,11 +11632,11 @@ if ('serviceWorker' in navigator) {
    ذخیره‌سازی محلی
    ============================================================ */
 const STORAGE = {
-  cards: 'leitner_de_v19',
-  settings: 'leitner_de_settings_v19',
-  stats: 'leitner_de_stats_v19',
-  session: 'leitner_de_session_v19',
-  binId: 'leitner_de_binid_v19'
+  cards: 'leitner_de_v20',
+  settings: 'leitner_de_settings_v20',
+  stats: 'leitner_de_stats_v20',
+  pinOffline: 'leitner_de_pin_offline_v20',
+  pinMastered: 'leitner_de_pin_mastered_v20'
 };
 
 let saveInProgress = false;
@@ -11809,12 +11644,11 @@ const save = async () => {
   if (saveInProgress) return;
   saveInProgress = true;
   try {
-    try {
-      localStorage.setItem(STORAGE.cards, JSON.stringify(cards));
-      localStorage.setItem(STORAGE.settings, JSON.stringify(settings));
-      localStorage.setItem(STORAGE.stats, JSON.stringify(stats));
-    } catch (e) {}
-  } finally { saveInProgress = false; }
+    localStorage.setItem(STORAGE.cards, JSON.stringify(cards));
+    localStorage.setItem(STORAGE.settings, JSON.stringify(settings));
+    localStorage.setItem(STORAGE.stats, JSON.stringify(stats));
+  } catch (e) {}
+  finally { saveInProgress = false; }
 };
 
 const saveSync = () => {
@@ -11837,10 +11671,6 @@ const load = async () => {
     const st = localStorage.getItem(STORAGE.stats);
     if (st) stats = { ...stats, ...JSON.parse(st) };
   } catch (e) {}
-
-  const savedBinId = localStorage.getItem(STORAGE.binId);
-  if (savedBinId) JSONBIN_CONFIG.BIN_ID = savedBinId;
-
   if (!Array.isArray(cards)) cards = [];
   cards.forEach(c => {
     if (c.box === undefined) c.box = 1;
@@ -11856,6 +11686,10 @@ const load = async () => {
    ============================================================ */
 let deferredPrompt = null;
 const installBtn = document.getElementById('btnInstall');
+const installToast = document.getElementById('installToast');
+const toastText = document.getElementById('toastText');
+const toastAction = document.getElementById('toastAction');
+const toastClose = document.getElementById('toastClose');
 
 const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
@@ -11864,26 +11698,47 @@ window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
   if (installBtn) installBtn.classList.remove('hidden');
+  showInstallToast('برنامه را نصب کنید و آفلاین استفاده کنید', 'نصب');
 });
 
 window.addEventListener('appinstalled', () => {
   deferredPrompt = null;
   if (installBtn) installBtn.classList.add('hidden');
+  hideInstallToast();
   showToastMessage('برنامه با موفقیت نصب شد');
 });
 
-if (installBtn) installBtn.addEventListener('click', async () => {
+if (installBtn) installBtn.addEventListener('click', triggerInstall);
+if (toastAction) toastAction.addEventListener('click', triggerInstall);
+if (toastClose) toastClose.addEventListener('click', () => {
+  hideInstallToast();
+  localStorage.setItem('install_dismissed', Date.now().toString());
+});
+
+async function triggerInstall() {
   if (deferredPrompt) {
     deferredPrompt.prompt();
     await deferredPrompt.userChoice;
     deferredPrompt = null;
-    installBtn.classList.add('hidden');
+    if (installBtn) installBtn.classList.add('hidden');
+    hideInstallToast();
   } else if (isIOS()) {
     showToastMessage('در Safari روی Share → Add to Home Screen بزنید', 6000);
   } else {
     showToastMessage('از منوی مرورگر Install app را انتخاب کنید', 6000);
   }
-});
+}
+
+function showInstallToast(text, actionLabel) {
+  const d = localStorage.getItem('install_dismissed');
+  if (d) { const days = (Date.now() - parseInt(d)) / 86400000; if (days < 7) return; }
+  if (isStandalone()) return;
+  toastText.textContent = text;
+  toastAction.textContent = actionLabel || 'نصب';
+  installToast.classList.add('show');
+  setTimeout(() => hideInstallToast(), 15000);
+}
+function hideInstallToast() { installToast.classList.remove('show'); }
 
 function showToastMessage(msg, duration = 3000) {
   const existing = document.getElementById('generic-toast');
@@ -11905,6 +11760,8 @@ function showToastMessage(msg, duration = 3000) {
     setTimeout(() => toast.remove(), 400);
   }, duration);
 }
+
+if (isIOS() && !isStandalone()) setTimeout(() => showInstallToast('برای نصب: Share → Add to Home Screen', 'راهنما'), 3000);
 
 /* ============================================================
    State
@@ -11936,8 +11793,9 @@ let isSpeaking = false;
 let offlineSearchQuery = '';
 let masteredSearchQuery = '';
 
-/* کاربر جاری */
-let currentUser = null; // { username, token, cardsCount, lastSync }
+/* پین‌ها */
+let pinnedOffline = null;
+let pinnedMastered = null;
 
 const $ = (id) => document.getElementById(id);
 
@@ -11978,181 +11836,6 @@ const sortByWord = (arr) => {
     const wb = (b.word || extractArticle(b.german).word || b.german || '').toLowerCase();
     return wa.localeCompare(wb, 'de');
   });
-};
-
-/* ============================================================
-   🔐 هش کردن رمز عبور با SHA-256
-   ============================================================ */
-const hashPassword = async (password) => {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hash));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-};
-
-/* ============================================================
-   ☁️ JSONBin Cloud Sync
-   ============================================================ */
-const syncHeaders = () => ({
-  'Content-Type': 'application/json',
-  'X-Master-Key': JSONBIN_CONFIG.MASTER_KEY,
-  'X-Bin-Meta': 'false'
-});
-
-/* ساخت BIN اگر وجود ندارد */
-const ensureBin = async () => {
-  if (JSONBIN_CONFIG.BIN_ID) return JSONBIN_CONFIG.BIN_ID;
-  const savedId = localStorage.getItem(STORAGE.binId);
-  if (savedId) {
-    JSONBIN_CONFIG.BIN_ID = savedId;
-    return savedId;
-  }
-
-  // ایجاد BIN جدید با ساختار خالی
-  try {
-    const res = await fetch(`${JSONBIN_CONFIG.API_URL}/b`, {
-      method: 'POST',
-      headers: {
-        ...syncHeaders(),
-        'X-Bin-Name': 'leitner-users',
-        'X-Bin-Private': 'true'
-      },
-      body: JSON.stringify({ users: {}, createdAt: Date.now() })
-    });
-    if (!res.ok) throw new Error('Create BIN failed: ' + res.status);
-    const data = await res.json();
-    const id = data.metadata?.id;
-    if (id) {
-      JSONBIN_CONFIG.BIN_ID = id;
-      localStorage.setItem(STORAGE.binId, id);
-      return id;
-    }
-    throw new Error('No BIN ID in response');
-  } catch (e) {
-    console.warn('ensureBin error:', e);
-    return null;
-  }
-};
-
-/* خواندن کل داده ابری */
-const fetchCloud = async () => {
-  const binId = await ensureBin();
-  if (!binId) return null;
-  try {
-    const res = await fetch(`${JSONBIN_CONFIG.API_URL}/b/${binId}/latest`, {
-      method: 'GET',
-      headers: syncHeaders()
-    });
-    if (!res.ok) throw new Error('Fetch failed: ' + res.status);
-    const data = await res.json();
-    return data.record || data;
-  } catch (e) {
-    console.warn('fetchCloud error:', e);
-    return null;
-  }
-};
-
-/* نوشتن کل داده ابری */
-const pushCloud = async (cloudData) => {
-  const binId = await ensureBin();
-  if (!binId) return false;
-  try {
-    const res = await fetch(`${JSONBIN_CONFIG.API_URL}/b/${binId}`, {
-      method: 'PUT',
-      headers: syncHeaders(),
-      body: JSON.stringify(cloudData)
-    });
-    return res.ok;
-  } catch (e) {
-    console.warn('pushCloud error:', e);
-    return false;
-  }
-};
-
-/* ============================================================
-   🔐 Auth Functions
-   ============================================================ */
-const register = async (username, password) => {
-  username = String(username || '').trim().toLowerCase();
-  if (!username || username.length < 3) throw new Error('نام کاربری حداقل ۳ کاراکتر');
-  if (!/^[a-z0-9_]+$/.test(username)) throw new Error('فقط حروف انگلیسی، اعداد و _');
-  if (!password || password.length < 4) throw new Error('رمز حداقل ۴ کاراکتر');
-
-  const passwordHash = await hashPassword(password);
-
-  const cloud = await fetchCloud();
-  if (!cloud) throw new Error('خطا در اتصال به سرور');
-
-  if (!cloud.users) cloud.users = {};
-  if (cloud.users[username]) throw new Error('این نام کاربری قبلاً گرفته شده');
-
-  cloud.users[username] = {
-    passwordHash,
-    cards: [],
-    stats: { reviews: {}, totalReviews: 0, totalCorrect: 0, totalWrong: 0, streak: 0, lastReview: null },
-    createdAt: Date.now(),
-    updatedAt: Date.now()
-  };
-
-  const ok = await pushCloud(cloud);
-  if (!ok) throw new Error('خطا در ذخیره‌سازی');
-
-  return { username };
-};
-
-const login = async (username, password) => {
-  username = String(username || '').trim().toLowerCase();
-  if (!username || !password) throw new Error('نام کاربری و رمز را وارد کنید');
-
-  const passwordHash = await hashPassword(password);
-
-  const cloud = await fetchCloud();
-  if (!cloud) throw new Error('خطا در اتصال به سرور');
-  if (!cloud.users || !cloud.users[username]) throw new Error('نام کاربری یافت نشد');
-
-  const user = cloud.users[username];
-  if (user.passwordHash !== passwordHash) throw new Error('رمز عبور اشتباه است');
-
-  return {
-    username,
-    cards: user.cards || [],
-    stats: user.stats || { reviews: {}, totalReviews: 0, totalCorrect: 0, totalWrong: 0, streak: 0, lastReview: null }
-  };
-};
-
-const saveUserData = async () => {
-  if (!currentUser) return;
-  try {
-    const cloud = await fetchCloud();
-    if (!cloud) return;
-    if (!cloud.users) cloud.users = {};
-    if (!cloud.users[currentUser.username]) return;
-    cloud.users[currentUser.username].cards = cards;
-    cloud.users[currentUser.username].stats = stats;
-    cloud.users[currentUser.username].updatedAt = Date.now();
-    await pushCloud(cloud);
-    currentUser.lastSync = Date.now();
-    localStorage.setItem(STORAGE.session, JSON.stringify({ username: currentUser.username }));
-  } catch (e) {
-    console.warn('saveUserData error:', e);
-  }
-};
-
-const loadUserData = (userData) => {
-  if (userData.cards && Array.isArray(userData.cards)) {
-    cards = userData.cards;
-    cards.forEach(c => {
-      if (c.box === undefined) c.box = 1;
-      if (!c.nextReview) c.nextReview = today();
-      if (!c.createdAt) c.createdAt = today();
-      if (!c.history) c.history = [];
-    });
-  }
-  if (userData.stats) {
-    stats = { ...stats, ...userData.stats };
-  }
-  saveSync();
 };
 
 /* ============================================================
@@ -12293,7 +11976,6 @@ const addFromSuggest = (item) => {
   }
   showToastMessage(`«${item.word}» به باکس ۱ اضافه شد`);
   showStatus('موفق', 'success');
-  if (currentUser) saveUserData();
 };
 
 const hideSuggestBox = () => {
@@ -12568,7 +12250,6 @@ const markGood = () => {
   if (idx !== -1) sessionQueue.splice(idx, 1);
   if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
   afterAnswer();
-  if (currentUser) saveUserData();
 };
 
 const markWrong = () => {
@@ -12587,7 +12268,6 @@ const markWrong = () => {
   if (idx !== -1) sessionQueue.splice(idx, 1);
   if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
   afterAnswer();
-  if (currentUser) saveUserData();
 };
 
 const markHard = () => {
@@ -12600,7 +12280,6 @@ const markHard = () => {
   if (idx !== -1) { sessionQueue.splice(idx, 1); sessionQueue.push(card.id); }
   if (sessionPosition >= sessionQueue.length) sessionPosition = 0;
   afterAnswer();
-  if (currentUser) saveUserData();
 };
 
 let statusTimer = null;
@@ -12660,7 +12339,6 @@ const addCard = () => {
     buildSessionQueue();
     showNextCard(0);
   }
-  if (currentUser) saveUserData();
 };
 
 /* ============================================================
@@ -12770,7 +12448,6 @@ const saveEdit = () => {
   $('editModal').classList.remove('show');
   renderWordList();
   if (currentCardId === card.id) renderCardSync(card);
-  if (currentUser) saveUserData();
 };
 
 const deleteCard = (cardId) => {
@@ -12788,7 +12465,6 @@ const deleteCard = (cardId) => {
     showNextCard(0);
   }
   showToastMessage('حذف شد');
-  if (currentUser) saveUserData();
 };
 
 const resetAll = () => {
@@ -12806,11 +12482,10 @@ const resetAll = () => {
   showNextCard(0);
   showToastMessage('همه کلمات حذف شدند', 3500);
   $('settingsModal').classList.remove('show');
-  if (currentUser) saveUserData();
 };
 
 /* ============================================================
-   Offline Modal
+   📖 Offline Modal با پین
    ============================================================ */
 let offlineRevealed = new Set();
 
@@ -12820,7 +12495,18 @@ const openOfflineModal = () => {
   $('offlineSearchInput').value = '';
   renderOfflineList();
   $('offlineModal').classList.add('show');
-  setTimeout(() => $('offlineSearchInput').focus(), 100);
+  setTimeout(() => {
+    // اسکرول به کلمه پین‌شده اگر وجود دارد
+    if (pinnedOffline) {
+      const el = document.querySelector(`[data-offline-key="${CSS.escape(pinnedOffline)}"]`);
+      if (el) {
+        el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        setTimeout(() => $('offlineSearchInput').focus(), 400);
+        return;
+      }
+    }
+    $('offlineSearchInput').focus();
+  }, 100);
 };
 
 const renderOfflineList = () => {
@@ -12835,7 +12521,7 @@ const renderOfflineList = () => {
     item.persian.includes(q)
   ) : sorted;
 
-  stats.textContent = `مجموع: ${offlineDB.length} کلمه${q ? ` — یافت‌شده: ${filtered.length}` : ''}`;
+  stats.textContent = `مجموع: ${offlineDB.length} کلمه${q ? ` — یافت‌شده: ${filtered.length}` : ''}${pinnedOffline ? ' — 📌 پین فعال' : ''}`;
 
   if (filtered.length === 0) {
     list.innerHTML = '<div class="empty-list">کلمه‌ای یافت نشد</div>';
@@ -12850,14 +12536,19 @@ const renderOfflineList = () => {
     const key = item.german;
     const artRevealed = offlineRevealed.has(key + '_art');
     const meanRevealed = offlineRevealed.has(key + '_mean');
+    const isPinned = pinnedOffline === item.german;
 
     const el = document.createElement('div');
-    el.className = 'offline-item';
+    el.className = 'offline-item' + (isPinned ? ' pinned' : '');
+    el.dataset.offlineKey = item.german;
 
     const hasArticle = !!item.article;
     const artClass = hasArticle ? item.article : '';
 
     el.innerHTML = `
+      <button class="o-pin-btn ${isPinned ? 'pinned' : ''}" title="${isPinned ? 'برداشتن پین' : 'پین کردن'}">
+        ${isPinned ? '📌' : '📍'}
+      </button>
       <div class="o-info">
         <div class="o-german">
           ${hasArticle ? `
@@ -12876,10 +12567,25 @@ const renderOfflineList = () => {
       <div class="o-actions">
         <button class="o-speak" title="تلفظ">🔊</button>
         <button class="o-add ${isAdded ? 'added' : ''}" ${isAdded ? 'disabled' : ''}>
-          ${isAdded ? '✓ اضافه شده' : '➕ افزودن'}
+          ${isAdded ? '✓' : '➕'}
         </button>
       </div>
     `;
+
+    // پین
+    el.querySelector('.o-pin-btn').onclick = (e) => {
+      e.stopPropagation();
+      if (pinnedOffline === item.german) {
+        pinnedOffline = null;
+        localStorage.removeItem(STORAGE.pinOffline);
+        showToastMessage('پین برداشته شد');
+      } else {
+        pinnedOffline = item.german;
+        localStorage.setItem(STORAGE.pinOffline, item.german);
+        showToastMessage(`📌 «${item.word}» پین شد`);
+      }
+      renderOfflineList();
+    };
 
     const artEl = el.querySelector('.o-article-hidden');
     if (artEl) {
@@ -12917,6 +12623,14 @@ const renderOfflineList = () => {
 
     list.appendChild(el);
   });
+
+  // اگر پین فعال است، به آن اسکرول کن
+  if (pinnedOffline && !q) {
+    setTimeout(() => {
+      const pinEl = list.querySelector(`[data-offline-key="${CSS.escape(pinnedOffline)}"]`);
+      if (pinEl) pinEl.scrollIntoView({ block: 'center' });
+    }, 50);
+  }
 };
 
 const addFromOffline = (item) => {
@@ -12944,11 +12658,10 @@ const addFromOffline = (item) => {
   }
   showToastMessage(`«${item.word}» به باکس ۱ اضافه شد`);
   renderOfflineList();
-  if (currentUser) saveUserData();
 };
 
 /* ============================================================
-   Mastered Modal
+   🏆 Mastered Modal با پین و حذف
    ============================================================ */
 let masteredRevealed = new Set();
 
@@ -12958,7 +12671,17 @@ const openMasteredModal = () => {
   $('masteredSearchInput').value = '';
   renderMasteredList();
   $('masteredModal').classList.add('show');
-  setTimeout(() => $('masteredSearchInput').focus(), 100);
+  setTimeout(() => {
+    if (pinnedMastered) {
+      const el = document.querySelector(`[data-mastered-key="${CSS.escape(pinnedMastered)}"]`);
+      if (el) {
+        el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        setTimeout(() => $('masteredSearchInput').focus(), 400);
+        return;
+      }
+    }
+    $('masteredSearchInput').focus();
+  }, 100);
 };
 
 const renderMasteredList = () => {
@@ -12975,7 +12698,7 @@ const renderMasteredList = () => {
     (item.persian || '').includes(q)
   ) : masteredCards;
 
-  stats.textContent = `مجموع: ${masteredCards.length} کلمه تثبیت‌شده${q ? ` — یافت‌شده: ${filtered.length}` : ''}`;
+  stats.textContent = `مجموع: ${masteredCards.length} کلمه تثبیت‌شده${q ? ` — یافت‌شده: ${filtered.length}` : ''}${pinnedMastered ? ' — 📌 پین فعال' : ''}`;
 
   if (filtered.length === 0) {
     list.innerHTML = '<div class="empty-list">هنوز کلمه‌ای به باکس تثبیت نرسیده است</div>';
@@ -12987,14 +12710,19 @@ const renderMasteredList = () => {
     const key = card.id;
     const artRevealed = masteredRevealed.has(key + '_art');
     const meanRevealed = masteredRevealed.has(key + '_mean');
+    const isPinned = pinnedMastered === card.id;
 
     const el = document.createElement('div');
-    el.className = 'offline-item';
+    el.className = 'offline-item' + (isPinned ? ' pinned' : '');
+    el.dataset.masteredKey = card.id;
 
     const hasArticle = !!card.article;
     const artClass = hasArticle ? card.article : '';
 
     el.innerHTML = `
+      <button class="o-pin-btn ${isPinned ? 'pinned' : ''}" title="${isPinned ? 'برداشتن پین' : 'پین کردن'}">
+        ${isPinned ? '📌' : '📍'}
+      </button>
       <div class="o-info">
         <div class="o-german">
           ${hasArticle ? `
@@ -13012,9 +12740,24 @@ const renderMasteredList = () => {
       </div>
       <div class="o-actions">
         <button class="o-speak" title="تلفظ">🔊</button>
-        <button class="o-back" title="برگرداندن به باکس ۱">⬅️ برگرداندن</button>
+        <button class="o-back" title="برگرداندن به باکس ۱">⬅️</button>
+        <button class="o-del" title="حذف">🗑️</button>
       </div>
     `;
+
+    el.querySelector('.o-pin-btn').onclick = (e) => {
+      e.stopPropagation();
+      if (pinnedMastered === card.id) {
+        pinnedMastered = null;
+        localStorage.removeItem(STORAGE.pinMastered);
+        showToastMessage('پین برداشته شد');
+      } else {
+        pinnedMastered = card.id;
+        localStorage.setItem(STORAGE.pinMastered, card.id);
+        showToastMessage(`📌 «${card.word || card.german}» پین شد`);
+      }
+      renderMasteredList();
+    };
 
     const artEl = el.querySelector('.o-article-hidden');
     if (artEl) {
@@ -13048,19 +12791,40 @@ const renderMasteredList = () => {
       returnToBox1(card);
     };
 
+    el.querySelector('.o-del').onclick = (e) => {
+      e.stopPropagation();
+      if (!confirm(`«${card.word || card.german}» حذف شود؟`)) return;
+      cards = cards.filter(c => c.id !== card.id);
+      if (pinnedMastered === card.id) {
+        pinnedMastered = null;
+        localStorage.removeItem(STORAGE.pinMastered);
+      }
+      save();
+      renderBoxes();
+      renderMasteredList();
+      showToastMessage('حذف شد');
+    };
+
     list.appendChild(el);
   });
+
+  if (pinnedMastered && !q) {
+    setTimeout(() => {
+      const pinEl = list.querySelector(`[data-mastered-key="${CSS.escape(pinnedMastered)}"]`);
+      if (pinEl) pinEl.scrollIntoView({ block: 'center' });
+    }, 50);
+  }
 };
 
 const returnToBox1 = (card) => {
   card.box = 1;
   card.nextReview = today();
   card.history.push({ date: today(), result: 'return', from: 6, to: 1 });
+  if (card.history.length > 100) card.history = card.history.slice(-100);
   save();
   renderBoxes();
   renderMasteredList();
   showToastMessage(`«${card.word || card.german}» به باکس ۱ برگشت`);
-  if (currentUser) saveUserData();
 };
 
 /* ============================================================
@@ -13068,7 +12832,7 @@ const returnToBox1 = (card) => {
    ============================================================ */
 const exportCards = () => {
   const data = {
-    version: 19,
+    version: 20,
     exportedAt: new Date().toISOString(),
     cards: cards.map(c => ({
       german: c.german,
@@ -13154,7 +12918,6 @@ const doImport = () => {
   $('btnImportDo').disabled = true;
   pendingImportData = null;
   showToastMessage(`${added} واژه اضافه شد${skipped ? ` — ${skipped} تکراری` : ''}`, 3500);
-  if (currentUser) saveUserData();
 };
 
 /* ============================================================
@@ -13174,146 +12937,6 @@ const toggleTheme = () => {
 };
 
 /* ============================================================
-   🎨 Auth UI
-   ============================================================ */
-let authTab = 'login';
-
-const openAuthModal = () => {
-  if (currentUser) {
-    // نمایش اطلاعات کاربر
-    $('authLoggedIn').style.display = 'block';
-    $('authNotLoggedIn').style.display = 'none';
-    $('authTitle').textContent = '👤 حساب کاربری';
-    $('authAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
-    $('authUsername').textContent = '@' + currentUser.username;
-    $('authSyncStatus').textContent = '☁️ متصل به سرور — ' + cards.length + ' کلمه';
-    $('authSyncStatus').className = 'auth-status success';
-  } else {
-    $('authLoggedIn').style.display = 'none';
-    $('authNotLoggedIn').style.display = 'block';
-    $('authTitle').textContent = '👤 ورود / ثبت‌نام';
-    $('authUsernameInput').value = '';
-    $('authPasswordInput').value = '';
-    $('authStatus').textContent = '';
-    $('authStatus').className = 'auth-status';
-    switchAuthTab('login');
-  }
-  $('authModal').classList.add('show');
-};
-
-const switchAuthTab = (tab) => {
-  authTab = tab;
-  document.querySelectorAll('.auth-tab').forEach(el => {
-    el.classList.toggle('active', el.dataset.tab === tab);
-  });
-  $('btnAuthSubmit').textContent = tab === 'login' ? 'ورود' : 'ثبت‌نام';
-  $('authStatus').textContent = '';
-  $('authStatus').className = 'auth-status';
-};
-
-const submitAuth = async () => {
-  const username = $('authUsernameInput').value.trim();
-  const password = $('authPasswordInput').value;
-
-  $('authStatus').textContent = '⏳ در حال اتصال...';
-  $('authStatus').className = 'auth-status';
-
-  try {
-    if (authTab === 'register') {
-      await register(username, password);
-      $('authStatus').textContent = '✅ ثبت‌نام موفق! حالا وارد شوید';
-      $('authStatus').className = 'auth-status success';
-      switchAuthTab('login');
-      $('authUsernameInput').value = username;
-      $('authPasswordInput').value = '';
-    } else {
-      const userData = await login(username, password);
-      currentUser = { username: userData.username, lastSync: Date.now() };
-      localStorage.setItem(STORAGE.session, JSON.stringify({ username: currentUser.username }));
-      loadUserData(userData);
-      renderBoxes();
-      buildSessionQueue();
-      showNextCard(0);
-      renderWordList();
-      $('authStatus').textContent = '✅ خوش آمدید!';
-      $('authStatus').className = 'auth-status success';
-      setTimeout(() => {
-        $('authModal').classList.remove('show');
-        updateUserButton();
-        showToastMessage(`خوش آمدی @${currentUser.username}`);
-      }, 600);
-    }
-  } catch (e) {
-    $('authStatus').textContent = '❌ ' + (e.message || 'خطا');
-    $('authStatus').className = 'auth-status error';
-  }
-};
-
-const logout = () => {
-  if (!confirm('از حساب خود خارج می‌شوید؟')) return;
-  currentUser = null;
-  localStorage.removeItem(STORAGE.session);
-  updateUserButton();
-  $('authModal').classList.remove('show');
-  showToastMessage('خارج شدید');
-};
-
-const forceSync = async () => {
-  if (!currentUser) return;
-  $('authSyncStatus').textContent = '⏳ در حال همگام‌سازی...';
-  $('authSyncStatus').className = 'auth-status';
-  await saveUserData();
-  const cloud = await fetchCloud();
-  if (cloud && cloud.users && cloud.users[currentUser.username]) {
-    const userData = cloud.users[currentUser.username];
-    loadUserData({ cards: userData.cards, stats: userData.stats });
-    renderBoxes();
-    buildSessionQueue();
-    showNextCard(0);
-    renderWordList();
-    $('authSyncStatus').textContent = '✅ همگام‌سازی شد — ' + cards.length + ' کلمه';
-    $('authSyncStatus').className = 'auth-status success';
-  } else {
-    $('authSyncStatus').textContent = '⚠️ خطا در همگام‌سازی';
-    $('authSyncStatus').className = 'auth-status error';
-  }
-};
-
-const updateUserButton = () => {
-  if (currentUser) {
-    $('btnUser').classList.add('user-logged-in');
-    $('btnUser').textContent = '👤';
-    $('btnUser').title = '@' + currentUser.username;
-  } else {
-    $('btnUser').classList.remove('user-logged-in');
-    $('btnUser').textContent = '👤';
-    $('btnUser').title = 'ورود / ثبت‌نام';
-  }
-};
-
-const restoreSession = async () => {
-  const sessionStr = localStorage.getItem(STORAGE.session);
-  if (!sessionStr) return;
-  try {
-    const session = JSON.parse(sessionStr);
-    if (session.username) {
-      const cloud = await fetchCloud();
-      if (cloud && cloud.users && cloud.users[session.username]) {
-        currentUser = { username: session.username, lastSync: Date.now() };
-        loadUserData({
-          cards: cloud.users[session.username].cards,
-          stats: cloud.users[session.username].stats
-        });
-        updateUserButton();
-        renderBoxes();
-        buildSessionQueue();
-        showNextCard(0);
-      }
-    }
-  } catch (e) {}
-};
-
-/* ============================================================
    Events
    ============================================================ */
 const bind = () => {
@@ -13329,7 +12952,6 @@ const bind = () => {
   $('btnTheme').onclick = toggleTheme;
   $('btnOffline').onclick = openOfflineModal;
   $('btnMastered').onclick = openMasteredModal;
-  $('btnUser').onclick = openAuthModal;
 
   $('btnSpeak').onclick = (e) => {
     e.stopPropagation();
@@ -13410,24 +13032,6 @@ const bind = () => {
     pendingImportData = null;
   };
 
-  /* Auth Modal */
-  document.querySelectorAll('.auth-tab').forEach(tab => {
-    tab.onclick = () => switchAuthTab(tab.dataset.tab);
-  });
-  $('btnAuthSubmit').onclick = submitAuth;
-  $('btnCloseAuth').onclick = () => $('authModal').classList.remove('show');
-  $('authModal').onclick = (e) => { if (e.target === $('authModal')) $('authModal').classList.remove('show'); };
-  $('btnLogout').onclick = logout;
-  $('btnForceSync').onclick = forceSync;
-  $('btnCloseAuthLoggedIn').onclick = () => $('authModal').classList.remove('show');
-
-  $('authPasswordInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') submitAuth();
-  });
-  $('authUsernameInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') $('authPasswordInput').focus();
-  });
-
   /* Offline Modal */
   $('btnCloseOffline').onclick = () => $('offlineModal').classList.remove('show');
   $('offlineModal').onclick = (e) => { if (e.target === $('offlineModal')) $('offlineModal').classList.remove('show'); };
@@ -13466,7 +13070,7 @@ const bind = () => {
       if (currentCardId) speakCurrentCard();
     } else if (e.key === 'Escape') {
       stopSpeaking();
-      ['settingsModal', 'editModal', 'offlineModal', 'masteredModal', 'authModal'].forEach(id => {
+      ['settingsModal', 'editModal', 'offlineModal', 'masteredModal'].forEach(id => {
         $(id)?.classList.remove('show');
       });
     }
@@ -13477,8 +13081,9 @@ const bind = () => {
     if (document.visibilityState === 'hidden') saveSync();
   });
   window.addEventListener('pagehide', () => saveSync());
+  document.addEventListener('freeze', () => saveSync());
+  window.addEventListener('blur', () => saveSync());
   setInterval(save, 15000);
-  setInterval(() => { if (currentUser) saveUserData(); }, 60000);
 };
 
 /* ============================================================
@@ -13487,6 +13092,13 @@ const bind = () => {
 const init = async () => {
   initOfflineDB();
   await load();
+
+  // بازیابی پین‌ها
+  const savedPinOffline = localStorage.getItem(STORAGE.pinOffline);
+  if (savedPinOffline) pinnedOffline = savedPinOffline;
+  const savedPinMastered = localStorage.getItem(STORAGE.pinMastered);
+  if (savedPinMastered) pinnedMastered = savedPinMastered;
+
   applyTheme();
   bind();
   renderBoxes();
@@ -13495,10 +13107,6 @@ const init = async () => {
   if (isStandalone() && installBtn) installBtn.classList.add('hidden');
   if (speechSupported) speechSynthesis.getVoices();
   saveSync();
-
-  // بازیابی جلسه کاربر
-  await restoreSession();
-  updateUserButton();
 };
 
 init();
